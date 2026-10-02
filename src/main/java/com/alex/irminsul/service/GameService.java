@@ -26,4 +26,18 @@ public class GameService {
     public Optional<Game> findById(Long id) {
         return gameRepository.findById(id);
     }
+
+    public Optional<Game> update(Long id, Game game) {
+        return gameRepository.findById(id)
+                .map(existingGame -> {
+                    existingGame.setTitle(game.getTitle());
+                    existingGame.setDescription(game.getDescription());
+                    existingGame.setReleaseDate(game.getReleaseDate());
+                    existingGame.setCoverUrl(game.getCoverUrl());
+                    existingGame.setGenre(game.getGenre());
+
+                    return gameRepository.save(existingGame);
+                });
+    }
+
 }

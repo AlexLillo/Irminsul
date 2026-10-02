@@ -33,4 +33,13 @@ public class GameController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Game> update(@PathVariable Long id, @RequestBody Game game) {
+        return gameService.update(id, game)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
 }
