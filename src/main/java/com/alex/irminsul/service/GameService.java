@@ -5,6 +5,7 @@ import com.alex.irminsul.repository.GameRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameService {
@@ -20,5 +21,9 @@ public class GameService {
 
     public Game save(Game game) {
         return gameRepository.save(game);
+    }
+
+    public Optional<Game> findById(Long id) {
+        return gameRepository.findById(id);
     }
 }

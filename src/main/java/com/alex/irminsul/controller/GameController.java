@@ -2,6 +2,7 @@ package com.alex.irminsul.controller;
 
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.service.GameService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,5 +25,12 @@ public class GameController {
     @PostMapping
     public Game save(@RequestBody Game game) {
         return gameService.save(game);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Game> findById(@PathVariable Long id) {
+        return gameService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
