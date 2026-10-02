@@ -40,4 +40,13 @@ public class GameService {
                 });
     }
 
+    public boolean deleteById(Long id) {
+        if (!gameRepository.existsById(id)) {
+            return false;
+        }
+
+        gameRepository.deleteById(id);
+        return true;
+    }
+
 }
