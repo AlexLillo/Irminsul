@@ -3,6 +3,8 @@ package com.alex.irminsul.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Game {
@@ -23,6 +25,14 @@ public class Game {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Genre genre;
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_platform",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "platform_id")
+    )
+    private Set<Platform> platforms = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -70,5 +80,13 @@ public class Game {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public Set<Platform> getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(Set<Platform> platforms) {
+        this.platforms = platforms;
     }
 }
