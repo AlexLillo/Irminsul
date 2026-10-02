@@ -2,6 +2,7 @@ package com.alex.irminsul.controller;
 
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.service.PlatformService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class PlatformController {
     }
 
     @PostMapping
-    public Platform save(@RequestBody Platform platform) {
+    public Platform save(@Valid @RequestBody Platform platform) {
         return platformService.save(platform);
     }
 

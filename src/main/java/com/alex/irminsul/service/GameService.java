@@ -4,6 +4,7 @@ import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
+import com.alex.irminsul.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class GameService {
     private Set<Platform> findExistingPlatforms(Set<Platform> platforms) {
         return platforms.stream()
                 .map(platform -> platformRepository.findById(platform.getId())
-                        .orElseThrow(() -> new IllegalArgumentException(
+                        .orElseThrow(() -> new ResourceNotFoundException(
                                 "Platform not found: " + platform.getId())))
                 .collect(Collectors.toSet());
     }

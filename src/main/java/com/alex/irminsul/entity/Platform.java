@@ -1,6 +1,7 @@
 package com.alex.irminsul.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Platform {
@@ -9,6 +10,7 @@ public class Platform {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
