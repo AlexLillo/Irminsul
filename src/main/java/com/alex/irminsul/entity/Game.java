@@ -1,6 +1,7 @@
 package com.alex.irminsul.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false, length = 200)
     private String title;
 

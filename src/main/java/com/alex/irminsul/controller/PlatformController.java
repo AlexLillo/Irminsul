@@ -37,7 +37,7 @@ public class PlatformController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Platform> update(@PathVariable Long id,
-                                           @RequestBody Platform platform) {
+                                           @RequestBody @Valid Platform platform) {
         return platformService.update(id, platform)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

@@ -2,6 +2,7 @@ package com.alex.irminsul.controller;
 
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.service.GameService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class GameController {
     }
 
     @PostMapping
-    public Game save(@RequestBody Game game) {
+    public Game save(@RequestBody @Valid Game game) {
         return gameService.save(game);
     }
 
@@ -35,7 +36,7 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> update(@PathVariable Long id, @RequestBody Game game) {
+    public ResponseEntity<Game> update(@PathVariable Long id, @RequestBody @Valid Game game) {
         return gameService.update(id, game)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
