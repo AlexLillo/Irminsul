@@ -4,6 +4,7 @@ import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.entity.User;
 import com.alex.irminsul.entity.UserGame;
 import com.alex.irminsul.entity.UserGameId;
+import com.alex.irminsul.exception.DuplicateResourceException;
 import com.alex.irminsul.exception.ResourceNotFoundException;
 import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.UserGameRepository;
@@ -32,28 +33,33 @@ public class UserGameService {
         return userGameRepository.findAll();
     }
 
-    public Optional<UserGame> findById(UserGameId id) {
-        return userGameRepository.findById(id);
-    }
-
     public List<UserGame> findByUserId(Long userId) {
         return userGameRepository.findByUserId(userId);
     }
 
-    public Optional<UserGame> findByUserIdAndGameId(Long userId, Long gameId) {
-        return userGameRepository.findByUserIdAndGameId(userId, gameId);
+    public Optional<UserGame> findByUsernameAndGameId(String username, Long gameId) {
+        return userGameRepository.findByUserUsernameAndGameId(username, gameId);
     }
 
-    public UserGame save(UserGame userGame) {
-        User user = userRepository.findById(userGame.getUser().getId())
+    public UserGame saveByUsername(String username, UserGame userGame) {
+
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
-                                "User not found: " + userGame.getUser().getId()));
+                                "User not found: " + username));
 
         Game game = gameRepository.findById(userGame.getGame().getId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Game not found: " + userGame.getGame().getId()));
+
+        if (userGameRepository
+                .findByUserUsernameAndGameId(username, game.getId())
+                .isPresent()) {
+
+            throw new DuplicateResourceException(
+                    "Game already exists in user's collection");
+        }
 
         userGame.setUser(user);
         userGame.setGame(game);
@@ -61,8 +67,13 @@ public class UserGameService {
         return userGameRepository.save(userGame);
     }
 
-    public Optional<UserGame> update(Long userId, Long gameId, UserGame userGame) {
-        return userGameRepository.findByUserIdAndGameId(userId, gameId)
+    public Optional<UserGame> updateByUsername(
+            String username,
+            Long gameId,
+            UserGame userGame) {
+
+        return userGameRepository
+                .findByUserUsernameAndGameId(username, gameId)
                 .map(existingUserGame -> {
                     existingUserGame.setStatus(userGame.getStatus());
                     existingUserGame.setRating(userGame.getRating());
@@ -72,12 +83,13 @@ public class UserGameService {
                 });
     }
 
-    public boolean deleteByUserIdAndGameId(Long userId, Long gameId) {
-        return userGameRepository.findByUserIdAndGameId(userId, gameId)
+    public boolean deleteByUsernameAndGameId(String username, Long gameId) {
+        return userGameRepository.findByUserUsernameAndGameId(username, gameId)
                 .map(userGame -> {
                     userGameRepository.delete(userGame);
                     return true;
                 })
                 .orElse(false);
     }
+
 }

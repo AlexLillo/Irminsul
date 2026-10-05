@@ -4,6 +4,7 @@ import com.alex.irminsul.entity.UserGame;
 import com.alex.irminsul.service.UserGameService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,38 +29,52 @@ public class UserGameController {
         return userGameService.findByUserId(userId);
     }
 
-    @GetMapping("/{userId}/{gameId}")
-    public ResponseEntity<UserGame> findByUserIdAndGameId(
-            @PathVariable Long userId,
-            @PathVariable Long gameId) {
+    @GetMapping("/{gameId}")
+    public ResponseEntity<UserGame> findByGameId(
+            @PathVariable Long gameId,
+            Authentication authentication) {
 
-        return userGameService.findByUserIdAndGameId(userId, gameId)
+        String username = authentication.getName();
+
+        return userGameService.findByUsernameAndGameId(username, gameId)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public UserGame save(@RequestBody @Valid UserGame userGame) {
-        return userGameService.save(userGame);
+    public UserGame save(
+            @RequestBody @Valid UserGame userGame,
+            Authentication authentication) {
+
+        String username = authentication.getName();
+
+        return userGameService.saveByUsername(username, userGame);
     }
 
-    @PutMapping("/{userId}/{gameId}")
+    @PutMapping("/{gameId}")
     public ResponseEntity<UserGame> update(
-            @PathVariable Long userId,
             @PathVariable Long gameId,
-            @RequestBody @Valid UserGame userGame) {
+            @RequestBody @Valid UserGame userGame,
+            Authentication authentication) {
 
-        return userGameService.update(userId, gameId, userGame)
+        String username = authentication.getName();
+
+        return userGameService.updateByUsername(
+                        username,
+                        gameId,
+                        userGame)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{userId}/{gameId}")
-    public ResponseEntity<Void> deleteByUserIdAndGameId(
-            @PathVariable Long userId,
-            @PathVariable Long gameId) {
+    @DeleteMapping("/{gameId}")
+    public ResponseEntity<Void> deleteByGameId(
+            @PathVariable Long gameId,
+            Authentication authentication) {
 
-        if (userGameService.deleteByUserIdAndGameId(userId, gameId)) {
+        String username = authentication.getName();
+
+        if (userGameService.deleteByUsernameAndGameId(username, gameId)) {
             return ResponseEntity.noContent().build();
         }
 

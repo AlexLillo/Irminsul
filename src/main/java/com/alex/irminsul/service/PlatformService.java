@@ -1,6 +1,8 @@
 package com.alex.irminsul.service;
 
 import com.alex.irminsul.entity.Platform;
+import com.alex.irminsul.exception.DuplicateResourceException;
+import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +14,12 @@ public class PlatformService {
 
     private final PlatformRepository platformRepository;
 
-    public PlatformService(PlatformRepository platformRepository) {
+    private final GameRepository gameRepository;
+
+    public PlatformService(PlatformRepository platformRepository,
+                           GameRepository gameRepository) {
         this.platformRepository = platformRepository;
+        this.gameRepository = gameRepository;
     }
 
     public List<Platform> findAll() {
@@ -25,6 +31,11 @@ public class PlatformService {
     }
 
     public Platform save(Platform platform) {
+        if (platformRepository.existsByName(platform.getName())) {
+            throw new DuplicateResourceException(
+                    "Platform already exists: " + platform.getName());
+        }
+
         return platformRepository.save(platform);
     }
 
@@ -40,6 +51,11 @@ public class PlatformService {
     public boolean deleteById(Long id) {
         if (!platformRepository.existsById(id)) {
             return false;
+        }
+
+        if (gameRepository.existsByPlatformsId(id)) {
+            throw new DuplicateResourceException(
+                    "Platform is used by one or more games");
         }
 
         platformRepository.deleteById(id);

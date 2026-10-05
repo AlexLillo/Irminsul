@@ -2,6 +2,7 @@ package com.alex.irminsul.service;
 
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.entity.Platform;
+import com.alex.irminsul.exception.DuplicateResourceException;
 import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
 import com.alex.irminsul.exception.ResourceNotFoundException;
@@ -40,6 +41,11 @@ public class GameService {
     }
 
     public Game save(Game game) {
+        if (gameRepository.existsByTitle(game.getTitle())) {
+            throw new DuplicateResourceException(
+                    "Game already exists: " + game.getTitle());
+        }
+
         if (game.getPlatforms() != null) {
             game.setPlatforms(findExistingPlatforms(game.getPlatforms()));
         }
@@ -48,6 +54,12 @@ public class GameService {
     }
 
     public Optional<Game> update(Long id, Game game) {
+
+        if (gameRepository.existsByTitleAndIdNot(game.getTitle(), id)) {
+            throw new DuplicateResourceException(
+                    "Game already exists: " + game.getTitle());
+        }
+
         return gameRepository.findById(id)
                 .map(existingGame -> {
                     existingGame.setTitle(game.getTitle());
@@ -57,7 +69,8 @@ public class GameService {
                     existingGame.setGenre(game.getGenre());
 
                     if (game.getPlatforms() != null) {
-                        existingGame.setPlatforms(findExistingPlatforms(game.getPlatforms()));
+                        existingGame.setPlatforms(
+                                findExistingPlatforms(game.getPlatforms()));
                     }
 
                     return gameRepository.save(existingGame);
