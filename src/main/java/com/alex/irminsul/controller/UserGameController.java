@@ -1,6 +1,7 @@
 package com.alex.irminsul.controller;
 
-import com.alex.irminsul.entity.UserGame;
+import com.alex.irminsul.dto.UserGameRequestDTO;
+import com.alex.irminsul.dto.UserGameResponseDTO;
 import com.alex.irminsul.service.UserGameService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,49 +21,57 @@ public class UserGameController {
     }
 
     @GetMapping
-    public List<UserGame> findAll() {
+    public List<UserGameResponseDTO> findAll() {
         return userGameService.findAll();
     }
 
     @GetMapping("/user/{userId}")
-    public List<UserGame> findByUserId(@PathVariable Long userId) {
+    public List<UserGameResponseDTO> findByUserId(
+            @PathVariable Long userId) {
+
         return userGameService.findByUserId(userId);
     }
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<UserGame> findByGameId(
+    public ResponseEntity<UserGameResponseDTO> findByGameId(
             @PathVariable Long gameId,
             Authentication authentication) {
 
         String username = authentication.getName();
 
-        return userGameService.findByUsernameAndGameId(username, gameId)
+        return userGameService
+                .findByUsernameAndGameId(username, gameId)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public UserGame save(
-            @RequestBody @Valid UserGame userGame,
+    public UserGameResponseDTO save(
+            @RequestBody @Valid UserGameRequestDTO userGameRequestDTO,
             Authentication authentication) {
 
         String username = authentication.getName();
 
-        return userGameService.saveByUsername(username, userGame);
+        return userGameService.saveByUsername(
+                username,
+                userGameRequestDTO
+        );
     }
 
     @PutMapping("/{gameId}")
-    public ResponseEntity<UserGame> update(
+    public ResponseEntity<UserGameResponseDTO> update(
             @PathVariable Long gameId,
-            @RequestBody @Valid UserGame userGame,
+            @RequestBody @Valid UserGameRequestDTO userGameRequestDTO,
             Authentication authentication) {
 
         String username = authentication.getName();
 
-        return userGameService.updateByUsername(
+        return userGameService
+                .updateByUsername(
                         username,
                         gameId,
-                        userGame)
+                        userGameRequestDTO
+                )
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -72,9 +81,10 @@ public class UserGameController {
             @PathVariable Long gameId,
             Authentication authentication) {
 
-        String username = authentication.getName();
+        if (userGameService.deleteByUsernameAndGameId(
+                authentication.getName(),
+                gameId)) {
 
-        if (userGameService.deleteByUsernameAndGameId(username, gameId)) {
             return ResponseEntity.noContent().build();
         }
 

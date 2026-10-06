@@ -1,5 +1,7 @@
 package com.alex.irminsul.service;
 
+import com.alex.irminsul.dto.PlatformRequestDTO;
+import com.alex.irminsul.dto.PlatformResponseDTO;
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.exception.DuplicateResourceException;
 import com.alex.irminsul.repository.GameRepository;
@@ -22,29 +24,51 @@ public class PlatformService {
         this.gameRepository = gameRepository;
     }
 
-    public List<Platform> findAll() {
-        return platformRepository.findAll();
+    private PlatformResponseDTO toResponseDTO(Platform platform) {
+        return new PlatformResponseDTO(
+                platform.getId(),
+                platform.getName()
+        );
     }
 
-    public Optional<Platform> findById(Long id) {
-        return platformRepository.findById(id);
+    public List<PlatformResponseDTO> findAll() {
+        return platformRepository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
-    public Platform save(Platform platform) {
-        if (platformRepository.existsByName(platform.getName())) {
+    public Optional<PlatformResponseDTO> findById(Long id) {
+        return platformRepository.findById(id)
+                .map(this::toResponseDTO);
+    }
+
+    public PlatformResponseDTO save(PlatformRequestDTO platformRequestDTO) {
+        if (platformRepository.existsByName(platformRequestDTO.getName())) {
             throw new DuplicateResourceException(
-                    "Platform already exists: " + platform.getName());
+                    "Platform already exists: " + platformRequestDTO.getName());
         }
 
-        return platformRepository.save(platform);
+        Platform platform = new Platform();
+        platform.setName(platformRequestDTO.getName());
+
+        Platform savedPlatform = platformRepository.save(platform);
+
+        return toResponseDTO(savedPlatform);
     }
 
-    public Optional<Platform> update(Long id, Platform platform) {
+    public Optional<PlatformResponseDTO> update(
+            Long id,
+            PlatformRequestDTO platformRequestDTO) {
+
         return platformRepository.findById(id)
                 .map(existingPlatform -> {
-                    existingPlatform.setName(platform.getName());
+                    existingPlatform.setName(platformRequestDTO.getName());
 
-                    return platformRepository.save(existingPlatform);
+                    Platform updatedPlatform =
+                            platformRepository.save(existingPlatform);
+
+                    return toResponseDTO(updatedPlatform);
                 });
     }
 

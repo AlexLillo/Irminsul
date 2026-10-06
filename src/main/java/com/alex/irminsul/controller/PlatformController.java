@@ -1,5 +1,7 @@
 package com.alex.irminsul.controller;
 
+import com.alex.irminsul.dto.PlatformRequestDTO;
+import com.alex.irminsul.dto.PlatformResponseDTO;
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.service.PlatformService;
 import jakarta.validation.Valid;
@@ -19,26 +21,30 @@ public class PlatformController {
     }
 
     @GetMapping
-    public List<Platform> findAll() {
+    public List<PlatformResponseDTO> findAll() {
         return platformService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Platform> findById(@PathVariable Long id) {
+    public ResponseEntity<PlatformResponseDTO> findById(@PathVariable Long id) {
         return platformService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Platform save(@Valid @RequestBody Platform platform) {
-        return platformService.save(platform);
+    public PlatformResponseDTO save(
+            @RequestBody @Valid PlatformRequestDTO platformRequestDTO) {
+
+        return platformService.save(platformRequestDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Platform> update(@PathVariable Long id,
-                                           @RequestBody @Valid Platform platform) {
-        return platformService.update(id, platform)
+    public ResponseEntity<PlatformResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody @Valid PlatformRequestDTO platformRequestDTO) {
+
+        return platformService.update(id, platformRequestDTO)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
