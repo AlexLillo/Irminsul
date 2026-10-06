@@ -1,5 +1,7 @@
 package com.alex.irminsul.controller;
 
+import com.alex.irminsul.dto.UserRequestDTO;
+import com.alex.irminsul.dto.UserResponseDTO;
 import com.alex.irminsul.entity.User;
 import com.alex.irminsul.service.UserService;
 import jakarta.validation.Valid;
@@ -19,19 +21,19 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> findAll() {
+    public List<UserResponseDTO> findAll() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
         return userService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public User save(@RequestBody @Valid User user) {
-        return userService.save(user);
+    public UserResponseDTO save(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+        return userService.save(userRequestDTO);
     }
 }

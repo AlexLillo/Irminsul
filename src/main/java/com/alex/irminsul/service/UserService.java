@@ -1,5 +1,7 @@
 package com.alex.irminsul.service;
 
+import com.alex.irminsul.dto.UserRequestDTO;
+import com.alex.irminsul.dto.UserResponseDTO;
 import com.alex.irminsul.entity.Role;
 import com.alex.irminsul.entity.User;
 import com.alex.irminsul.exception.DuplicateResourceException;
@@ -22,28 +24,45 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    private UserResponseDTO toResponseDTO(User user) {
+        return new UserResponseDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getRole()
+        );
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public List<UserResponseDTO> findAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
-    public User save(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
+    public Optional<UserResponseDTO> findById(Long id) {
+        return userRepository.findById(id)
+                .map(this::toResponseDTO);
+    }
+
+    public UserResponseDTO save(UserRequestDTO userRequestDTO) {
+        if (userRepository.existsByUsername(userRequestDTO.getUsername())) {
             throw new DuplicateResourceException(
-                    "Username already exists: " + user.getUsername());
+                    "Username already exists: " + userRequestDTO.getUsername());
         }
 
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
             throw new DuplicateResourceException(
-                    "Email already exists: " + user.getEmail());
+                    "Email already exists: " + userRequestDTO.getEmail());
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setUsername(userRequestDTO.getUsername());
+        user.setEmail(userRequestDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         user.setRole(Role.USER);
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        return toResponseDTO(savedUser);
     }
 }
