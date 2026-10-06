@@ -1,5 +1,8 @@
 package com.alex.irminsul.service;
 
+import com.alex.irminsul.dto.GameRequestDTO;
+import com.alex.irminsul.dto.GameResponseDTO;
+import com.alex.irminsul.dto.PlatformResponseDTO;
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.exception.DuplicateResourceException;
@@ -24,56 +27,96 @@ public class GameService {
         this.platformRepository = platformRepository;
     }
 
-    public List<Game> findAll() {
-        return gameRepository.findAll();
+    private GameResponseDTO toResponseDTO(Game game) {
+        Set<PlatformResponseDTO> platforms = game.getPlatforms()
+                .stream()
+                .map(platform -> new PlatformResponseDTO(
+                        platform.getId(),
+                        platform.getName()
+                ))
+                .collect(Collectors.toSet());
+
+        return new GameResponseDTO(
+                game.getId(),
+                game.getTitle(),
+                game.getDescription(),
+                game.getReleaseDate(),
+                game.getCoverUrl(),
+                game.getGenre(),
+                platforms
+        );
     }
 
-    public Optional<Game> findById(Long id) {
-        return gameRepository.findById(id);
+    public List<GameResponseDTO> findAll() {
+        return gameRepository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
-    private Set<Platform> findExistingPlatforms(Set<Platform> platforms) {
-        return platforms.stream()
-                .map(platform -> platformRepository.findById(platform.getId())
+    public Optional<GameResponseDTO> findById(Long id) {
+        return gameRepository.findById(id)
+                .map(this::toResponseDTO);
+    }
+
+    private Set<Platform> findExistingPlatforms(Set<Long> platformIds) {
+        return platformIds.stream()
+                .map(platformId -> platformRepository.findById(platformId)
                         .orElseThrow(() -> new ResourceNotFoundException(
-                                "Platform not found: " + platform.getId())))
+                                "Platform not found: " + platformId)))
                 .collect(Collectors.toSet());
     }
 
-    public Game save(Game game) {
-        if (gameRepository.existsByTitle(game.getTitle())) {
+    public GameResponseDTO save(GameRequestDTO gameRequestDTO) {
+        if (gameRepository.existsByTitle(gameRequestDTO.getTitle())) {
             throw new DuplicateResourceException(
-                    "Game already exists: " + game.getTitle());
+                    "Game already exists: " + gameRequestDTO.getTitle());
         }
 
-        if (game.getPlatforms() != null) {
-            game.setPlatforms(findExistingPlatforms(game.getPlatforms()));
+        Game game = new Game();
+        game.setTitle(gameRequestDTO.getTitle());
+        game.setDescription(gameRequestDTO.getDescription());
+        game.setReleaseDate(gameRequestDTO.getReleaseDate());
+        game.setCoverUrl(gameRequestDTO.getCoverUrl());
+        game.setGenre(gameRequestDTO.getGenre());
+
+        if (gameRequestDTO.getPlatformIds() != null) {
+            game.setPlatforms(
+                    findExistingPlatforms(gameRequestDTO.getPlatformIds())
+            );
         }
 
-        return gameRepository.save(game);
+        Game savedGame = gameRepository.save(game);
+
+        return toResponseDTO(savedGame);
     }
 
-    public Optional<Game> update(Long id, Game game) {
+    public Optional<GameResponseDTO> update(Long id, GameRequestDTO gameRequestDTO) {
+        if (gameRepository.existsByTitleAndIdNot(
+                gameRequestDTO.getTitle(), id)) {
 
-        if (gameRepository.existsByTitleAndIdNot(game.getTitle(), id)) {
             throw new DuplicateResourceException(
-                    "Game already exists: " + game.getTitle());
+                    "Game already exists: " + gameRequestDTO.getTitle());
         }
 
         return gameRepository.findById(id)
                 .map(existingGame -> {
-                    existingGame.setTitle(game.getTitle());
-                    existingGame.setDescription(game.getDescription());
-                    existingGame.setReleaseDate(game.getReleaseDate());
-                    existingGame.setCoverUrl(game.getCoverUrl());
-                    existingGame.setGenre(game.getGenre());
+                    existingGame.setTitle(gameRequestDTO.getTitle());
+                    existingGame.setDescription(gameRequestDTO.getDescription());
+                    existingGame.setReleaseDate(gameRequestDTO.getReleaseDate());
+                    existingGame.setCoverUrl(gameRequestDTO.getCoverUrl());
+                    existingGame.setGenre(gameRequestDTO.getGenre());
 
-                    if (game.getPlatforms() != null) {
+                    if (gameRequestDTO.getPlatformIds() != null) {
                         existingGame.setPlatforms(
-                                findExistingPlatforms(game.getPlatforms()));
+                                findExistingPlatforms(
+                                        gameRequestDTO.getPlatformIds())
+                        );
                     }
 
-                    return gameRepository.save(existingGame);
+                    Game updatedGame = gameRepository.save(existingGame);
+
+                    return toResponseDTO(updatedGame);
                 });
     }
 

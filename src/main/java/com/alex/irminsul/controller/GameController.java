@@ -1,5 +1,7 @@
 package com.alex.irminsul.controller;
 
+import com.alex.irminsul.dto.GameRequestDTO;
+import com.alex.irminsul.dto.GameResponseDTO;
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.service.GameService;
 import jakarta.validation.Valid;
@@ -19,25 +21,30 @@ public class GameController {
     }
 
     @GetMapping
-    public List<Game> findAll() {
+    public List<GameResponseDTO> findAll() {
         return gameService.findAll();
     }
 
-    @PostMapping
-    public Game save(@RequestBody @Valid Game game) {
-        return gameService.save(game);
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<Game> findById(@PathVariable Long id) {
+    public ResponseEntity<GameResponseDTO> findById(@PathVariable Long id) {
         return gameService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping
+    public GameResponseDTO save(
+            @RequestBody @Valid GameRequestDTO gameRequestDTO) {
+
+        return gameService.save(gameRequestDTO);
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Game> update(@PathVariable Long id, @RequestBody @Valid Game game) {
-        return gameService.update(id, game)
+    public ResponseEntity<GameResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody @Valid GameRequestDTO gameRequestDTO) {
+
+        return gameService.update(id, gameRequestDTO)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
