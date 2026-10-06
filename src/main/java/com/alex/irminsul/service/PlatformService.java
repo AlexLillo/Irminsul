@@ -61,9 +61,18 @@ public class PlatformService {
             Long id,
             PlatformRequestDTO platformRequestDTO) {
 
+        if (platformRepository.existsByNameAndIdNot(
+                platformRequestDTO.getName(), id)) {
+
+            throw new DuplicateResourceException(
+                    "Platform already exists: "
+                            + platformRequestDTO.getName());
+        }
+
         return platformRepository.findById(id)
                 .map(existingPlatform -> {
-                    existingPlatform.setName(platformRequestDTO.getName());
+                    existingPlatform.setName(
+                            platformRequestDTO.getName());
 
                     Platform updatedPlatform =
                             platformRepository.save(existingPlatform);
