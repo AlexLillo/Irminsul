@@ -45,6 +45,11 @@ public class UserGameController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/me")
+    public List<UserGameResponseDTO> findMyGames(Authentication authentication) {
+        return userGameService.findByUsername(authentication.getName());
+    }
+
     @PostMapping
     public UserGameResponseDTO save(
             @RequestBody @Valid UserGameRequestDTO userGameRequestDTO,

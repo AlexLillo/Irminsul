@@ -1,0 +1,27 @@
+article {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.genre {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background-color: #eee;
+  font-size: 0.85rem;
+}

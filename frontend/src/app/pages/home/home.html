@@ -1,2 +1,14 @@
-<h1>Irminsul</h1>
-<p>Video game collection</p>
+<header>
+  <h1>Irminsul</h1>
+  <p>Video game collection</p>
+</header>
+
+<main>
+  <h2>My games</h2>
+
+  <section>
+    @for (game of games(); track game.gameId) {
+      <app-game-card [game]="game"></app-game-card>
+    }
+  </section>
+</main>

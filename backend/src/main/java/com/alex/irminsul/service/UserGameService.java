@@ -92,6 +92,13 @@ public class UserGameService {
                 .toList();
     }
 
+    public List<UserGameResponseDTO> findByUsername(String username) {
+        return userGameRepository.findByUserUsername(username)
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
+
     public Optional<UserGameResponseDTO> findByUsernameAndGameId(
             String username,
             Long gameId) {

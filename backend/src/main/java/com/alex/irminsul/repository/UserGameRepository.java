@@ -11,5 +11,7 @@ public interface UserGameRepository extends JpaRepository<UserGame, UserGameId> 
 
     List<UserGame> findByUserId(Long userId);
 
+    List<UserGame> findByUserUsername(String username);
+
     Optional<UserGame> findByUserUsernameAndGameId(String username, Long gameId);
 }
