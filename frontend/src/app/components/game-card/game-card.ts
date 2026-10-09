@@ -8,5 +8,6 @@ import { UserGame } from '../../services/user-game.service';
   styleUrl: './game-card.css'
 })
 export class GameCard {
+
   game = input.required<UserGame>();
 }

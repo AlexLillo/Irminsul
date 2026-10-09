@@ -1,0 +1,31 @@
+
+<header>
+  <h1>Irminsul</h1>
+  <p>Explore the game catalog</p>
+</header>
+
+<main>
+  <h2>Game catalog</h2>
+
+  <section>
+    @for (game of games(); track game.id) {
+    <article>
+      <a [routerLink]="['/games', game.id]" class="game-link">
+        <img [src]="game.coverUrl" [alt]="'Portada de ' + game.title">
+        <h3>{{ game.title }}</h3>
+      </a>
+
+      <p>{{ game.genre }}</p>
+
+      @if (game.platforms.length > 0) {
+      <p>
+        Plataformas:
+        @for (platform of game.platforms; track platform.id) {
+        {{ platform.name }}@if (!$last) {, }
+        }
+      </p>
+      }
+    </article>
+    }
+  </section>
+</main>

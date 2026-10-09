@@ -1,0 +1,15 @@
+
+<nav>
+  <a routerLink="/" class="brand">Irminsul</a>
+
+  <div class="links">
+    <a routerLink="/">Catálogo</a>
+
+    @if (authService.isLoggedIn()) {
+    <a routerLink="/home">Mi biblioteca</a>
+    <a (click)="logout()">Cerrar sesión</a>
+    } @else {
+    <a routerLink="/login">Iniciar sesión</a>
+    }
+  </div>
+</nav>

@@ -1,0 +1,46 @@
+@if (game(); as currentGame) {
+<main>
+  <a routerLink="/">← Volver al catálogo</a>
+
+  <article>
+    <img
+      [src]="currentGame.coverUrl"
+      [alt]="'Portada de ' + currentGame.title"
+    >
+
+    <div class="details">
+      <h1>{{ currentGame.title }}</h1>
+
+      <p><strong>Género:</strong> {{ currentGame.genre }}</p>
+
+      <p>
+        <strong>Fecha de lanzamiento:</strong>
+        {{ currentGame.releaseDate || 'Desconocida' }}
+      </p>
+
+      <p>
+        <strong>Descripción:</strong>
+        {{ currentGame.description || 'Sin descripción disponible.' }}
+      </p>
+
+      <section>
+        <h2>Plataformas</h2>
+
+        @if (currentGame.platforms.length > 0) {
+        <ul>
+          @for (platform of currentGame.platforms; track platform.id) {
+          <li>{{ platform.name }}</li>
+          }
+        </ul>
+        } @else {
+        <p>Sin plataformas registradas.</p>
+        }
+      </section>
+    </div>
+  </article>
+</main>
+} @else {
+<main>
+  <p>Cargando juego...</p>
+</main>
+}

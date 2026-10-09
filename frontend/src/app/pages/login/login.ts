@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -15,9 +15,20 @@ export class Login {
 
   username = '';
   password = '';
+  errorMessage = signal('');
 
   login(): void {
+    this.errorMessage.set('');
     this.authService.login(this.username, this.password);
-    this.router.navigate(['/home']);
+
+    this.authService.validateCredentials().subscribe({
+      next: () => {
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.authService.logout();
+        this.errorMessage.set('Usuario o contraseña incorrectos.');
+      }
+    });
   }
 }

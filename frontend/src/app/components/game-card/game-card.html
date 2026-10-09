@@ -7,4 +7,12 @@
   >
 
   <span class="status">{{ game().status }}</span>
+  @if (game().rating !== null) {
+  <p>Mi puntuación: {{ game().rating }}/10</p>
+  } @else {
+  <p>Sin puntuación</p>
+  }
+  @if (game().notes) {
+  <p>{{ game().notes }}</p>
+  }
 </article>
