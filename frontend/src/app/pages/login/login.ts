@@ -3,7 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   username = '';
   password = '';
@@ -43,7 +44,13 @@ export class Login {
     this.authService.validateCredentials().subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/home']);
+
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        const destination = returnUrl?.startsWith('/') && !returnUrl.startsWith('//')
+          ? returnUrl
+          : '/home';
+
+        this.router.navigateByUrl(destination);
       },
       error: (error: HttpErrorResponse) => {
         this.authService.logout();

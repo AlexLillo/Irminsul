@@ -1,6 +1,6 @@
 @if (errorMessage()) {
 <main>
-  <p>{{ errorMessage() }}</p>
+  <p class="error">{{ errorMessage() }}</p>
   <a routerLink="/">Volver al catálogo</a>
 </main>
 } @else if (game(); as currentGame) {
@@ -41,6 +41,93 @@
         <p>Sin plataformas registradas.</p>
         }
       </section>
+
+      <section>
+        <h2>Mi biblioteca</h2>
+
+        @if (!isLoggedIn()) {
+        <p>
+          <a
+            routerLink="/login"
+            [queryParams]="{ returnUrl: '/games/' + currentGame.id }"
+          >
+            Inicia sesión
+          </a>
+          para añadir este juego a tu biblioteca.
+        </p>
+        } @else if (userGame()) {
+        <p>Este juego ya está en tu biblioteca.</p>
+
+        <label for="game-status">Estado:</label>
+        <select
+          id="game-status"
+          [value]="selectedStatus()"
+          (change)="onStatusChange($event)"
+          [disabled]="isUpdating()"
+        >
+          <option value="BACKLOG">Pendiente</option>
+          <option value="PLAYING">Jugando</option>
+          <option value="COMPLETED">Completado</option>
+          <option value="DROPPED">Abandonado</option>
+        </select>
+
+        <label for="game-rating">Mi puntuación (1-10):</label>
+        <select
+          id="game-rating"
+          [value]="selectedRating() ?? ''"
+          (change)="onRatingChange($event)"
+          [disabled]="isUpdating()"
+        >
+          <option value="">Sin puntuación</option>
+          @for (rating of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track rating) {
+          <option [value]="rating">{{ rating }}</option>
+          }
+        </select>
+
+        <label for="game-notes">Mis notas:</label>
+        <textarea
+          id="game-notes"
+          rows="4"
+          [value]="selectedNotes()"
+          (input)="onNotesChange($event)"
+          [disabled]="isUpdating()"
+          placeholder="¿Qué te está pareciendo este juego?"
+        ></textarea>
+
+        <button
+          type="button"
+          (click)="updateGameStatus()"
+          [disabled]="isUpdating()"
+        >
+          {{ isUpdating() ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+        } @else {
+        <label for="new-game-status">Estado inicial:</label>
+        <select
+          id="new-game-status"
+          [value]="selectedStatus()"
+          (change)="onStatusChange($event)"
+          [disabled]="isAdding()"
+        >
+          <option value="BACKLOG">Pendiente</option>
+          <option value="PLAYING">Jugando</option>
+          <option value="COMPLETED">Completado</option>
+          <option value="DROPPED">Abandonado</option>
+        </select>
+
+        <button
+          type="button"
+          (click)="addToLibrary()"
+          [disabled]="isAdding()"
+        >
+          {{ isAdding() ? 'Añadiendo...' : 'Añadir a mi biblioteca' }}
+        </button>
+        }
+
+        @if (libraryError()) {
+        <p class="error">{{ libraryError() }}</p>
+        }
+      </section>
     </div>
   </article>
 </main>
@@ -49,3 +136,4 @@
   <p>Cargando juego...</p>
 </main>
 }
+

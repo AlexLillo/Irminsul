@@ -1,3 +1,4 @@
+
 main {
   max-width: 1100px;
   margin: 0 auto;
@@ -78,6 +79,78 @@ article > img {
   font-size: 0.9rem;
 }
 
+/* Formulario de la biblioteca */
+
+.details label {
+  display: block;
+  margin: 1rem 0 0.4rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.details select,
+.details textarea {
+  display: block;
+  width: 100%;
+  max-width: 450px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #d2d5dd;
+  border-radius: 8px;
+  background-color: white;
+  color: #333;
+  font: inherit;
+}
+
+.details textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.details select:focus,
+.details textarea:focus {
+  outline: 2px solid #5267a8;
+  outline-offset: 2px;
+  border-color: #5267a8;
+}
+
+.details select:disabled,
+.details textarea:disabled {
+  background-color: #f2f2f2;
+  cursor: not-allowed;
+}
+
+.details button {
+  display: inline-block;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #5267a8;
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.details button:hover:not(:disabled) {
+  background-color: #40558f;
+}
+
+.details button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mensajes */
+
+.error {
+  padding: 1rem;
+  border: 1px solid #e0a0a0;
+  border-radius: 8px;
+  background-color: #fff0f0;
+  color: #8b2020;
+}
+
 @media (max-width: 650px) {
   main {
     padding: 1rem;
@@ -98,3 +171,4 @@ article > img {
     font-size: 1.7rem;
   }
 }
+
