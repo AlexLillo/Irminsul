@@ -26,3 +26,11 @@ article img {
   width: 100%;
   display: block;
 }
+
+.error {
+  padding: 1rem;
+  border: 1px solid #e0a0a0;
+  border-radius: 8px;
+  background-color: #fff0f0;
+  color: #8b2020;
+}

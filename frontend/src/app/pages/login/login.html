@@ -1,13 +1,17 @@
+
 <main>
   <h1>Iniciar sesión</h1>
 
-  <form (ngSubmit)="login()">
+  <form #loginForm="ngForm" (ngSubmit)="submitLogin(loginForm)">
     <label>
       Usuario
       <input
         type="text"
         [(ngModel)]="username"
         name="username"
+        required
+        autocomplete="username"
+        [disabled]="isLoading()"
       >
     </label>
 
@@ -17,13 +21,18 @@
         type="password"
         [(ngModel)]="password"
         name="password"
+        required
+        autocomplete="current-password"
+        [disabled]="isLoading()"
       >
     </label>
 
-    <button type="submit">Iniciar sesión</button>
+    <button type="submit" [disabled]="isLoading()">
+      {{ isLoading() ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+    </button>
   </form>
+
   @if (errorMessage()) {
   <p class="error">{{ errorMessage() }}</p>
   }
-
 </main>

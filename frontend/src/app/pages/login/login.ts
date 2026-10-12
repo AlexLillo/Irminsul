@@ -1,5 +1,7 @@
+
 import { Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -15,19 +17,50 @@ export class Login {
 
   username = '';
   password = '';
+
   errorMessage = signal('');
+  isLoading = signal(false);
+
+  submitLogin(form: NgForm): void {
+    this.errorMessage.set('');
+
+    if (form.invalid) {
+      this.errorMessage.set('Introduce tu usuario y contraseña.');
+      return;
+    }
+
+    if (this.isLoading()) {
+      return;
+    }
+
+    this.login();
+  }
 
   login(): void {
-    this.errorMessage.set('');
+    this.isLoading.set(true);
     this.authService.login(this.username, this.password);
 
     this.authService.validateCredentials().subscribe({
       next: () => {
+        this.isLoading.set(false);
         this.router.navigate(['/home']);
       },
-      error: () => {
+      error: (error: HttpErrorResponse) => {
         this.authService.logout();
-        this.errorMessage.set('Usuario o contraseña incorrectos.');
+
+        if (error.status === 401 || error.status === 403) {
+          this.errorMessage.set('Usuario o contraseña incorrectos.');
+        } else if (error.status === 0) {
+          this.errorMessage.set(
+            'No se ha podido conectar con el servidor. Inténtalo de nuevo más tarde.'
+          );
+        } else {
+          this.errorMessage.set(
+            'Ha ocurrido un error al iniciar sesión. Inténtalo de nuevo.'
+          );
+        }
+
+        this.isLoading.set(false);
       }
     });
   }

@@ -1,4 +1,9 @@
-@if (game(); as currentGame) {
+@if (errorMessage()) {
+<main>
+  <p>{{ errorMessage() }}</p>
+  <a routerLink="/">Volver al catálogo</a>
+</main>
+} @else if (game(); as currentGame) {
 <main>
   <a routerLink="/">← Volver al catálogo</a>
 

@@ -12,10 +12,21 @@ export class Home {
   private userGameService = inject(UserGameService);
 
   games = signal<UserGame[]>([]);
+  errorMessage = signal('');
+  isLoading = signal(true);
 
   constructor() {
-    this.userGameService.getMyGames().subscribe(games => {
-      this.games.set(games);
+    this.userGameService.getMyGames().subscribe({
+      next: games => {
+        this.games.set(games);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.errorMessage.set(
+          'No se ha podido cargar tu biblioteca. Inténtalo de nuevo más tarde.'
+        );
+        this.isLoading.set(false);
+      }
     });
   }
 }

@@ -62,3 +62,11 @@ p {
   opacity: 0.85;
 }
 
+.error {
+  padding: 1rem;
+  border: 1px solid #e0a0a0;
+  border-radius: 8px;
+  background-color: #fff0f0;
+  color: #8b2020;
+}
+

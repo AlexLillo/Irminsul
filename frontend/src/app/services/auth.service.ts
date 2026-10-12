@@ -36,6 +36,6 @@ export class AuthService {
   }
 
   validateCredentials(): Observable<void> {
-    return this.http.get<void>('http://localhost:8080/api/games');
+    return this.http.get<void>('http://localhost:8080/api/user-games/me');
   }
 }

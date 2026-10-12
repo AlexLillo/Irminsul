@@ -14,12 +14,18 @@ export class GameDetail {
   private gameService = inject(GameService);
 
   game = signal<Game | null>(null);
+  errorMessage = signal('');
 
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.gameService.getGameById(id).subscribe(game => {
-      this.game.set(game);
+    this.gameService.getGameById(id).subscribe({
+      next: game => {
+        this.game.set(game);
+      },
+      error: () => {
+        this.errorMessage.set('No se ha podido encontrar el juego.');
+      }
     });
   }
 }

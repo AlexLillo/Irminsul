@@ -6,9 +6,18 @@
 <main>
   <h2>My games</h2>
 
+  @if (errorMessage()) {
+  <p class="error">{{ errorMessage() }}</p>
+  } @else if (isLoading()) {
+  <p>Cargando tu biblioteca...</p>
+  } @else if (games().length === 0) {
+  <p>Aún no tienes juegos en tu biblioteca.</p>
+  } @else {
   <section>
     @for (game of games(); track game.gameId) {
-      <app-game-card [game]="game"></app-game-card>
+    <app-game-card [game]="game"></app-game-card>
     }
   </section>
+  }
 </main>
+
