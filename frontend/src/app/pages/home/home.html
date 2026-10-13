@@ -4,7 +4,7 @@
 </header>
 
 <main>
-  <h2>My games</h2>
+  <h2>Mi biblioteca</h2>
 
   @if (errorMessage()) {
   <p class="error">{{ errorMessage() }}</p>
@@ -13,8 +13,67 @@
   } @else if (games().length === 0) {
   <p>Aún no tienes juegos en tu biblioteca.</p>
   } @else {
-  <section>
-    @for (game of games(); track game.gameId) {
+  <section class="filters" aria-label="Filtros de mi biblioteca">
+    <div class="filter-field search-field">
+      <label for="game-search">Buscar por título</label>
+      <input
+        id="game-search"
+        type="search"
+        placeholder="Ej. Zelda..."
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
+      >
+    </div>
+
+    <div class="filter-field">
+      <label for="status-filter">Estado</label>
+      <select
+        id="status-filter"
+        [value]="selectedStatus()"
+        (change)="selectedStatus.set($any($event.target).value)"
+      >
+        <option value="">Todos los estados</option>
+        @for (status of statuses; track status.value) {
+        <option [value]="status.value">{{ status.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label for="sort-filter">Ordenar por</label>
+      <select
+        id="sort-filter"
+        [value]="sortOption()"
+        (change)="sortOption.set($any($event.target).value)"
+      >
+        <option value="title-asc">Título (A–Z)</option>
+        <option value="title-desc">Título (Z–A)</option>
+        <option value="rating-highest">Puntuación (mayor a menor)</option>
+        <option value="rating-lowest">Puntuación (menor a mayor)</option>
+      </select>
+    </div>
+
+    <button
+      type="button"
+      class="reset-button"
+      (click)="resetFilters()"
+    >
+      Restablecer filtros
+    </button>
+  </section>
+
+  <p class="results-count" aria-live="polite">
+    {{ filteredGames().length }}
+    {{ filteredGames().length === 1 ? 'juego encontrado' : 'juegos encontrados' }}
+  </p>
+
+  @if (filteredGames().length === 0) {
+  <p class="empty-results">
+    No hay juegos que coincidan con los criterios seleccionados.
+  </p>
+  } @else {
+  <section class="game-grid" aria-label="Juegos de mi biblioteca">
+    @for (game of filteredGames(); track game.gameId) {
     <app-game-card
       [gameId]="game.gameId"
       [title]="game.gameTitle"
@@ -27,4 +86,6 @@
     }
   </section>
   }
+  }
 </main>
+

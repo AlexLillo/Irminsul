@@ -10,11 +10,78 @@
   <p class="error">{{ errorMessage() }}</p>
   } @else if (isLoading()) {
   <p>Cargando catálogo...</p>
-  } @else if (games().length === 0) {
-  <p>No hay juegos disponibles en el catálogo.</p>
   } @else {
-  <section>
-    @for (game of games(); track game.id) {
+  <section class="filters" aria-label="Filtros del catálogo">
+    <div class="filter-field search-field">
+      <label for="game-search">Buscar por título</label>
+      <input
+        id="game-search"
+        type="search"
+        placeholder="Ej. Zelda..."
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
+      >
+    </div>
+
+    <div class="filter-field">
+      <label for="genre-filter">Género</label>
+      <select
+        id="genre-filter"
+        [value]="selectedGenre()"
+        (change)="selectedGenre.set($any($event.target).value)"
+      >
+        <option value="">Todos los géneros</option>
+        @for (genre of genres(); track genre) {
+        <option [value]="genre">{{ genre }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label for="platform-filter">Plataforma</label>
+      <select
+        id="platform-filter"
+        [value]="selectedPlatform()"
+        (change)="selectedPlatform.set($any($event.target).value)"
+      >
+        <option value="">Todas las plataformas</option>
+        @for (platform of platforms(); track platform) {
+        <option [value]="platform">{{ platform }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label for="sort-filter">Ordenar por</label>
+      <select
+        id="sort-filter"
+        [value]="sortOption()"
+        (change)="sortOption.set($any($event.target).value)"
+      >
+        <option value="title-asc">Título (A–Z)</option>
+        <option value="title-desc">Título (Z–A)</option>
+        <option value="release-newest">Lanzamiento (más reciente)</option>
+        <option value="release-oldest">Lanzamiento (más antiguo)</option>
+      </select>
+    </div>
+
+    <button type="button" class="reset-button" (click)="resetFilters()">
+      Restablecer filtros
+    </button>
+  </section>
+
+  <p class="results-count" aria-live="polite">
+    {{ filteredGames().length }}
+    {{ filteredGames().length === 1 ? 'juego encontrado' : 'juegos encontrados' }}
+  </p>
+
+  @if (filteredGames().length === 0) {
+  <p class="empty-results">
+    No hay juegos que coincidan con los criterios seleccionados.
+  </p>
+  } @else {
+  <section class="game-grid" aria-label="Resultados del catálogo">
+    @for (game of filteredGames(); track game.id) {
     <app-game-card
       [gameId]="game.id"
       [title]="game.title"
@@ -26,4 +93,6 @@
     }
   </section>
   }
+  }
 </main>
+
