@@ -15,9 +15,16 @@
   } @else {
   <section>
     @for (game of games(); track game.gameId) {
-    <app-game-card [game]="game"></app-game-card>
+    <app-game-card
+      [gameId]="game.gameId"
+      [title]="game.gameTitle"
+      [coverUrl]="game.gameCoverUrl"
+      [status]="game.status"
+      [rating]="game.rating"
+      [notes]="game.notes"
+      context="home"
+    />
     }
   </section>
   }
 </main>
-

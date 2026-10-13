@@ -1,5 +1,8 @@
-
 article {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
   padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 12px;
@@ -10,6 +13,26 @@ article {
 h3 {
   margin-top: 0;
   margin-bottom: 1rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+h3 a,
+article > a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h3 a:hover {
+  color: #5267a8;
+}
+
+article > a img {
+  transition: opacity 0.2s ease;
+}
+
+article > a:hover img {
+  opacity: 0.85;
 }
 
 img {
@@ -23,6 +46,7 @@ img {
 
 .status {
   display: inline-block;
+  align-self: flex-start;
   margin-bottom: 0.5rem;
   padding: 0.25rem 0.6rem;
   border-radius: 999px;

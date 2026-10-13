@@ -1,10 +1,13 @@
-
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Game } from '../../models/game';
 import { GameService } from '../../services/game.service';
 import { AuthService } from '../../services/auth.service';
-import { GameStatus, UserGame, UserGameService } from '../../services/user-game.service';
+import {
+  GameStatus,
+  UserGame,
+  UserGameService
+} from '../../services/user-game.service';
 
 @Component({
   selector: 'app-game-detail',
@@ -17,6 +20,13 @@ export class GameDetail {
   private gameService = inject(GameService);
   private authService = inject(AuthService);
   private userGameService = inject(UserGameService);
+
+  private source = this.route.snapshot.queryParamMap.get('from');
+
+  backLink = this.source === 'home'
+    ? { label: '← Volver a mi biblioteca', route: '/home' }
+    : { label: '← Volver al catálogo', route: '/catalog' };
+
   isUpdating = signal(false);
   selectedRating = signal<number | null>(null);
   selectedNotes = signal('');
@@ -118,8 +128,6 @@ export class GameDetail {
       return;
     }
 
-    const currentEntry = this.userGame()!;
-
     this.isUpdating.set(true);
     this.libraryError.set('');
 
@@ -177,5 +185,4 @@ export class GameDetail {
       }
     });
   }
-
 }

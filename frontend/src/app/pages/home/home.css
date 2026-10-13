@@ -11,20 +11,12 @@ main {
 
 section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, 220px), 260px)
+  );
   gap: 1.5rem;
-  align-items: start;
-}
-
-article {
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-article img {
-  width: 100%;
-  display: block;
+  align-items: stretch;
 }
 
 .error {

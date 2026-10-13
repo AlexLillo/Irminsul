@@ -1,18 +1,52 @@
 <article>
-  <h3>{{ game().gameTitle }}</h3>
+  <h3>
+    <a
+      [routerLink]="['/games', gameId()]"
+      [queryParams]="{ from: context() }"
+    >
+      {{ title() }}
+    </a>
+  </h3>
 
-  <img
-    [src]="game().gameCoverUrl"
-    alt="Game cover"
+  <a
+    [routerLink]="['/games', gameId()]"
+    [queryParams]="{ from: context() }"
+    [attr.aria-label]="'Ver detalles de ' + title()"
   >
+    <img
+      [src]="coverUrl()"
+      [alt]="'Portada de ' + title()"
+    >
+  </a>
 
-  <span class="status">{{ game().status }}</span>
-  @if (game().rating !== null) {
-  <p>Mi puntuación: {{ game().rating }}/10</p>
+  @if (context() === 'catalog') {
+  @if (genre()) {
+  <p>{{ genre() }}</p>
+  }
+
+  @if (platforms().length > 0) {
+  <p>
+    Plataformas:
+    @for (platform of platforms(); track platform.id) {
+    {{ platform.name }}@if (!$last) {, }
+    }
+  </p>
+  }
+  }
+
+  @if (context() === 'home') {
+  @if (status()) {
+  <span class="status">{{ status() }}</span>
+  }
+
+  @if (rating() !== undefined && rating() !== null) {
+  <p>Mi puntuación: {{ rating() }}/10</p>
   } @else {
   <p>Sin puntuación</p>
   }
-  @if (game().notes) {
-  <p>{{ game().notes }}</p>
+
+  @if (notes()) {
+  <p>{{ notes() }}</p>
+  }
   }
 </article>

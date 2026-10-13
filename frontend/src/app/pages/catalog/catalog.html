@@ -15,28 +15,15 @@
   } @else {
   <section>
     @for (game of games(); track game.id) {
-    <article>
-      <a [routerLink]="['/games', game.id]" class="game-link">
-        <img
-          [src]="game.coverUrl"
-          [alt]="'Portada de ' + game.title"
-        >
-        <h3>{{ game.title }}</h3>
-      </a>
-
-      <p>{{ game.genre }}</p>
-
-      @if (game.platforms.length > 0) {
-      <p>
-        Plataformas:
-        @for (platform of game.platforms; track platform.id) {
-        {{ platform.name }}@if (!$last) {, }
-        }
-      </p>
-      }
-    </article>
+    <app-game-card
+      [gameId]="game.id"
+      [title]="game.title"
+      [coverUrl]="game.coverUrl"
+      [genre]="game.genre"
+      [platforms]="game.platforms"
+      context="catalog"
+    />
     }
   </section>
   }
 </main>
-

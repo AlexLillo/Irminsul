@@ -1,12 +1,16 @@
-
 @if (errorMessage()) {
 <main>
   <p class="error">{{ errorMessage() }}</p>
-  <a routerLink="/">Volver al catálogo</a>
+
+  <a [routerLink]="backLink.route">
+    {{ backLink.label }}
+  </a>
 </main>
 } @else if (game(); as currentGame) {
 <main>
-  <a routerLink="/">← Volver al catálogo</a>
+  <a [routerLink]="backLink.route">
+    {{ backLink.label }}
+  </a>
 
   <article>
     <img
@@ -18,10 +22,12 @@
       <h1>{{ currentGame.title }}</h1>
 
       <p><strong>Género:</strong> {{ currentGame.genre }}</p>
+
       <p>
         <strong>Fecha de lanzamiento:</strong>
         {{ currentGame.releaseDate || 'Desconocida' }}
       </p>
+
       <p>
         <strong>Descripción:</strong>
         {{ currentGame.description || 'Sin descripción disponible.' }}
@@ -48,7 +54,9 @@
         <p>
           <a
             routerLink="/login"
-            [queryParams]="{ returnUrl: '/games/' + currentGame.id }"
+            [queryParams]="{
+                  returnUrl: '/games/' + currentGame.id + '?from=' + backLink.route.substring(1)
+                }"
           >
             Inicia sesión
           </a>
@@ -144,5 +152,6 @@
   <p>Cargando juego...</p>
 </main>
 }
+
 
 
