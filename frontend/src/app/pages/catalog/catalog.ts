@@ -7,7 +7,9 @@ type SortOption =
   | 'title-asc'
   | 'title-desc'
   | 'release-newest'
-  | 'release-oldest';
+  | 'release-oldest'
+  | 'rating-highest'
+  | 'rating-lowest';
 
 @Component({
   selector: 'app-catalog',
@@ -73,6 +75,42 @@ export class Catalog {
         case 'release-oldest':
           return a.releaseDate.localeCompare(b.releaseDate);
 
+        case 'rating-highest':
+        case 'rating-lowest': {
+          const aHasRating =
+            a.averageRating !== null && a.ratingCount > 0;
+          const bHasRating =
+            b.averageRating !== null && b.ratingCount > 0;
+
+          // Los juegos sin valoraciones siempre quedan al final.
+          if (aHasRating !== bHasRating) {
+            return aHasRating ? -1 : 1;
+          }
+
+          // Si ninguno tiene valoración, ordenamos por título.
+          if (!aHasRating || !bHasRating) {
+            return a.title.localeCompare(b.title);
+          }
+
+          const ratingDifference =
+            a.averageRating! - b.averageRating!;
+
+          if (ratingDifference !== 0) {
+            return sort === 'rating-highest'
+              ? -ratingDifference
+              : ratingDifference;
+          }
+
+          // Desempate por número de valoraciones y luego por título.
+          const countDifference = b.ratingCount - a.ratingCount;
+
+          if (countDifference !== 0) {
+            return countDifference;
+          }
+
+          return a.title.localeCompare(b.title);
+        }
+
         case 'title-asc':
         default:
           return a.title.localeCompare(b.title);
@@ -102,5 +140,6 @@ export class Catalog {
     this.sortOption.set('title-asc');
   }
 }
+
 
 

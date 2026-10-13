@@ -14,6 +14,8 @@ public class GameResponseDTO {
     private String coverUrl;
     private Genre genre;
     private Set<PlatformResponseDTO> platforms;
+    private Double averageRating;
+    private Long ratingCount;
 
     public GameResponseDTO() {
     }
@@ -32,6 +34,8 @@ public class GameResponseDTO {
         this.coverUrl = coverUrl;
         this.genre = genre;
         this.platforms = platforms;
+        this.averageRating = null;
+        this.ratingCount = 0L;
     }
 
     public Long getId() {
@@ -40,10 +44,6 @@ public class GameResponseDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Set<PlatformResponseDTO> getPlatforms() {
-        return platforms;
     }
 
     public void setPlatforms(Set<PlatformResponseDTO> platforms) {
@@ -88,5 +88,25 @@ public class GameResponseDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<PlatformResponseDTO> getPlatforms() {
+        return platforms;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public Long getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(Long ratingCount) {
+        this.ratingCount = ratingCount;
     }
 }

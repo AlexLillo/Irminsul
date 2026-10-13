@@ -6,6 +6,8 @@ export interface Game {
   coverUrl: string;
   genre: string;
   platforms: Platform[];
+  averageRating: number | null;
+  ratingCount: number;
 }
 
 export interface Platform {

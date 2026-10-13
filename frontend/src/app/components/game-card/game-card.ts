@@ -1,3 +1,4 @@
+
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Platform } from '../../models/game';
@@ -17,6 +18,9 @@ export class GameCard {
 
   genre = input<string>();
   platforms = input<Platform[]>([]);
+
+  averageRating = input<number | null>(null);
+  ratingCount = input<number>(0);
 
   status = input<GameStatus>();
   rating = input<number | null>();

@@ -62,6 +62,8 @@
         <option value="title-desc">Título (Z–A)</option>
         <option value="release-newest">Lanzamiento (más reciente)</option>
         <option value="release-oldest">Lanzamiento (más antiguo)</option>
+        <option value="rating-highest">Valoración (más alta)</option>
+        <option value="rating-lowest">Valoración (más baja)</option>
       </select>
     </div>
 
@@ -88,6 +90,8 @@
       [coverUrl]="game.coverUrl"
       [genre]="game.genre"
       [platforms]="game.platforms"
+      [averageRating]="game.averageRating"
+      [ratingCount]="game.ratingCount"
       context="catalog"
     />
     }
@@ -95,4 +99,3 @@
   }
   }
 </main>
-

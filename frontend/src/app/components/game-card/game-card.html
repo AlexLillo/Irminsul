@@ -20,6 +20,21 @@
   </a>
 
   @if (context() === 'catalog') {
+  @if (averageRating() !== null && ratingCount() > 0) {
+  <p class="community-rating">
+    <strong>{{ averageRating()!.toLocaleString('es-ES', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1
+      }) }}/10</strong>
+    <span>
+          · {{ ratingCount() }}
+          {{ ratingCount() === 1 ? 'valoración' : 'valoraciones' }}
+        </span>
+  </p>
+  } @else {
+  <p class="community-rating no-rating">Sin valoraciones</p>
+  }
+
   @if (genre()) {
   <p>{{ genre() }}</p>
   }
@@ -50,3 +65,4 @@
   }
   }
 </article>
+

@@ -6,28 +6,39 @@ import com.alex.irminsul.dto.PlatformResponseDTO;
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.exception.DuplicateResourceException;
+import com.alex.irminsul.exception.ResourceNotFoundException;
 import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
-import com.alex.irminsul.exception.ResourceNotFoundException;
+import com.alex.irminsul.repository.UserGameRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class GameService {
+
     private final GameRepository gameRepository;
     private final PlatformRepository platformRepository;
+    private final UserGameRepository userGameRepository;
 
     public GameService(GameRepository gameRepository,
-                       PlatformRepository platformRepository) {
+                       PlatformRepository platformRepository,
+                       UserGameRepository userGameRepository) {
         this.gameRepository = gameRepository;
         this.platformRepository = platformRepository;
+        this.userGameRepository = userGameRepository;
     }
 
-    private GameResponseDTO toResponseDTO(Game game) {
+    private GameResponseDTO toResponseDTO(
+            Game game,
+            Double averageRating,
+            Long ratingCount) {
+
         Set<PlatformResponseDTO> platforms = game.getPlatforms()
                 .stream()
                 .map(platform -> new PlatformResponseDTO(
@@ -36,7 +47,7 @@ public class GameService {
                 ))
                 .collect(Collectors.toSet());
 
-        return new GameResponseDTO(
+        GameResponseDTO dto = new GameResponseDTO(
                 game.getId(),
                 game.getTitle(),
                 game.getDescription(),
@@ -45,12 +56,60 @@ public class GameService {
                 game.getGenre(),
                 platforms
         );
+
+        dto.setAverageRating(averageRating);
+        dto.setRatingCount(ratingCount);
+
+        return dto;
+    }
+
+    private GameResponseDTO toResponseDTO(Game game) {
+        List<Object[]> statisticsRows =
+                userGameRepository.findRatingStatisticsByGameId(game.getId());
+
+        Object[] statistics = statisticsRows.isEmpty()
+                ? new Object[]{null, 0L}
+                : statisticsRows.get(0);
+
+        Double averageRating = statistics[0] == null
+                ? null
+                : ((Number) statistics[0]).doubleValue();
+
+        Long ratingCount = ((Number) statistics[1]).longValue();
+
+        return toResponseDTO(game, averageRating, ratingCount);
     }
 
     public List<GameResponseDTO> findAll() {
+        Map<Long, Object[]> statisticsByGameId = new HashMap<>();
+
+        for (Object[] statistics :
+                userGameRepository.findRatingStatistics()) {
+
+            Long gameId = ((Number) statistics[0]).longValue();
+            statisticsByGameId.put(gameId, statistics);
+        }
+
         return gameRepository.findAll()
                 .stream()
-                .map(this::toResponseDTO)
+                .map(game -> {
+                    Object[] statistics =
+                            statisticsByGameId.get(game.getId());
+
+                    Double averageRating = statistics == null
+                            ? null
+                            : ((Number) statistics[1]).doubleValue();
+
+                    Long ratingCount = statistics == null
+                            ? 0L
+                            : ((Number) statistics[2]).longValue();
+
+                    return toResponseDTO(
+                            game,
+                            averageRating,
+                            ratingCount
+                    );
+                })
                 .toList();
     }
 
@@ -91,7 +150,10 @@ public class GameService {
         return toResponseDTO(savedGame);
     }
 
-    public Optional<GameResponseDTO> update(Long id, GameRequestDTO gameRequestDTO) {
+    public Optional<GameResponseDTO> update(
+            Long id,
+            GameRequestDTO gameRequestDTO) {
+
         if (gameRepository.existsByTitleAndIdNot(
                 gameRequestDTO.getTitle(), id)) {
 
@@ -128,5 +190,5 @@ public class GameService {
         gameRepository.deleteById(id);
         return true;
     }
-
 }
+

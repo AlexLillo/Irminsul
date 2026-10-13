@@ -1,3 +1,4 @@
+
 @if (errorMessage()) {
 <main>
   <p class="error">{{ errorMessage() }}</p>
@@ -20,6 +21,25 @@
 
     <div class="details">
       <h1>{{ currentGame.title }}</h1>
+
+      <section class="community-rating">
+        <h2>Valoración de la comunidad</h2>
+
+        @if (currentGame.averageRating !== null && currentGame.ratingCount > 0) {
+        <p class="average-rating">
+          {{ currentGame.averageRating.toLocaleString('es-ES', {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1
+          }) }}/10
+        </p>
+        <p>
+          {{ currentGame.ratingCount }}
+          {{ currentGame.ratingCount === 1 ? 'valoración' : 'valoraciones' }}
+        </p>
+        } @else {
+        <p>Sin valoraciones todavía.</p>
+        }
+      </section>
 
       <p><strong>Género:</strong> {{ currentGame.genre }}</p>
 
@@ -152,6 +172,5 @@
   <p>Cargando juego...</p>
 </main>
 }
-
 
 

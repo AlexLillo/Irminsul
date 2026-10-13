@@ -44,6 +44,26 @@ img {
   border-radius: 6px;
 }
 
+.community-rating {
+  margin: 0 0 0.5rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.community-rating strong {
+  color: #5267a8;
+}
+
+.community-rating span {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.community-rating.no-rating {
+  color: #777;
+  font-size: 0.9rem;
+}
+
 .status {
   display: inline-block;
   align-self: flex-start;
@@ -58,3 +78,4 @@ p {
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
+
