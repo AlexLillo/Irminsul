@@ -20,6 +20,7 @@ export class GameDetail {
   isUpdating = signal(false);
   selectedRating = signal<number | null>(null);
   selectedNotes = signal('');
+  isDeleting = signal(false);
 
   game = signal<Game | null>(null);
   userGame = signal<UserGame | null>(null);
@@ -110,7 +111,6 @@ export class GameDetail {
     });
   }
 
-
   updateGameStatus(): void {
     const currentGame = this.game();
 
@@ -139,6 +139,41 @@ export class GameDetail {
           'No se ha podido actualizar el estado del juego. Inténtalo de nuevo.'
         );
         this.isUpdating.set(false);
+      }
+    });
+  }
+
+  deleteFromLibrary(): void {
+    const currentGame = this.game();
+
+    if (!currentGame || !this.userGame() || this.isDeleting()) {
+      return;
+    }
+
+    const confirmed = confirm(
+      `¿Quieres eliminar "${currentGame.title}" de tu biblioteca?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.isDeleting.set(true);
+    this.libraryError.set('');
+
+    this.userGameService.deleteGame(currentGame.id).subscribe({
+      next: () => {
+        this.userGame.set(null);
+        this.selectedStatus.set('BACKLOG');
+        this.selectedRating.set(null);
+        this.selectedNotes.set('');
+        this.isDeleting.set(false);
+      },
+      error: () => {
+        this.libraryError.set(
+          'No se ha podido eliminar el juego de tu biblioteca. Inténtalo de nuevo.'
+        );
+        this.isDeleting.set(false);
       }
     });
   }

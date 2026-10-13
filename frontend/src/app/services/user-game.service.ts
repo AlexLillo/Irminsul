@@ -40,5 +40,10 @@ export class UserGameService {
   updateGame(gameId: number, request: UserGameRequest): Observable<UserGame> {
     return this.http.put<UserGame>(`${this.apiUrl}/${gameId}`, request);
   }
+
+  deleteGame(gameId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${gameId}`);
+  }
+
 }
 

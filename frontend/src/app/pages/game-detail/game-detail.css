@@ -141,6 +141,14 @@ article > img {
   cursor: not-allowed;
 }
 
+.details .delete-button {
+  background-color: #a83232;
+}
+
+.details .delete-button:hover:not(:disabled) {
+  background-color: #862626;
+}
+
 /* Mensajes */
 
 .error {
@@ -171,4 +179,5 @@ article > img {
     font-size: 1.7rem;
   }
 }
+
 

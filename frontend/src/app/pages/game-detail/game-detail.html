@@ -1,3 +1,4 @@
+
 @if (errorMessage()) {
 <main>
   <p class="error">{{ errorMessage() }}</p>
@@ -17,12 +18,10 @@
       <h1>{{ currentGame.title }}</h1>
 
       <p><strong>Género:</strong> {{ currentGame.genre }}</p>
-
       <p>
         <strong>Fecha de lanzamiento:</strong>
         {{ currentGame.releaseDate || 'Desconocida' }}
       </p>
-
       <p>
         <strong>Descripción:</strong>
         {{ currentGame.description || 'Sin descripción disponible.' }}
@@ -63,7 +62,7 @@
           id="game-status"
           [value]="selectedStatus()"
           (change)="onStatusChange($event)"
-          [disabled]="isUpdating()"
+          [disabled]="isUpdating() || isDeleting()"
         >
           <option value="BACKLOG">Pendiente</option>
           <option value="PLAYING">Jugando</option>
@@ -76,7 +75,7 @@
           id="game-rating"
           [value]="selectedRating() ?? ''"
           (change)="onRatingChange($event)"
-          [disabled]="isUpdating()"
+          [disabled]="isUpdating() || isDeleting()"
         >
           <option value="">Sin puntuación</option>
           @for (rating of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track rating) {
@@ -90,16 +89,25 @@
           rows="4"
           [value]="selectedNotes()"
           (input)="onNotesChange($event)"
-          [disabled]="isUpdating()"
+          [disabled]="isUpdating() || isDeleting()"
           placeholder="¿Qué te está pareciendo este juego?"
         ></textarea>
 
         <button
           type="button"
           (click)="updateGameStatus()"
-          [disabled]="isUpdating()"
+          [disabled]="isUpdating() || isDeleting()"
         >
           {{ isUpdating() ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+
+        <button
+          type="button"
+          class="delete-button"
+          (click)="deleteFromLibrary()"
+          [disabled]="isUpdating() || isDeleting()"
+        >
+          {{ isDeleting() ? 'Eliminando...' : 'Eliminar de mi biblioteca' }}
         </button>
         } @else {
         <label for="new-game-status">Estado inicial:</label>
@@ -136,4 +144,5 @@
   <p>Cargando juego...</p>
 </main>
 }
+
 
