@@ -1,5 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { Game } from '../../models/game';
 import { GameService } from '../../services/game.service';
 import { AuthService } from '../../services/auth.service';
@@ -11,7 +13,7 @@ import {
 
 @Component({
   selector: 'app-game-detail',
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './game-detail.html',
   styleUrl: './game-detail.css'
 })
@@ -42,39 +44,85 @@ export class GameDetail {
   isLoggedIn = this.authService.isLoggedIn;
 
   constructor() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.route.paramMap.pipe(
+      tap(() => this.resetGameState()),
+      switchMap(params => {
+        const id = Number(params.get('id'));
 
-    this.gameService.getGameById(id).subscribe({
-      next: game => {
-        this.game.set(game);
-        this.loadUserGame(id);
-      },
-      error: () => {
-        this.errorMessage.set('No se ha podido encontrar el juego.');
+        if (!Number.isInteger(id) || id <= 0) {
+          return of({
+            game: null,
+            userGame: null,
+            gameError: true
+          });
+        }
+
+        return this.gameService.getGameById(id).pipe(
+          switchMap(game =>
+            this.loadUserGame(id).pipe(
+              map(userGame => ({
+                game,
+                userGame,
+                gameError: false
+              }))
+            )
+          ),
+          catchError(() =>
+            of({
+              game: null,
+              userGame: null,
+              gameError: true
+            })
+          )
+        );
+      })
+    ).subscribe(result => {
+      this.game.set(result.game);
+      this.userGame.set(result.userGame);
+
+      if (result.gameError) {
+        this.errorMessage.set(
+          'No se ha podido encontrar el juego.'
+        );
+        return;
+      }
+
+      this.errorMessage.set('');
+
+      if (result.userGame) {
+        this.selectedStatus.set(result.userGame.status);
+        this.selectedRating.set(result.userGame.rating);
+        this.selectedNotes.set(result.userGame.notes ?? '');
       }
     });
   }
 
-  private loadUserGame(gameId: number): void {
+  private resetGameState(): void {
+    this.game.set(null);
+    this.userGame.set(null);
+    this.errorMessage.set('');
+    this.libraryError.set('');
+    this.selectedStatus.set('BACKLOG');
+    this.selectedRating.set(null);
+    this.selectedNotes.set('');
+  }
+
+  private loadUserGame(gameId: number) {
     if (!this.isLoggedIn()) {
-      return;
+      return of(null);
     }
 
-    this.userGameService.getGameEntry(gameId).subscribe({
-      next: userGame => {
-        this.userGame.set(userGame);
-        this.selectedStatus.set(userGame.status);
-        this.selectedRating.set(userGame.rating);
-        this.selectedNotes.set(userGame.notes ?? '');
-      },
-      error: error => {
+    return this.userGameService.getGameEntry(gameId).pipe(
+      catchError(error => {
         if (error.status !== 404) {
           this.libraryError.set(
             'No se ha podido comprobar si el juego está en tu biblioteca.'
           );
         }
-      }
-    });
+
+        return of(null);
+      })
+    );
   }
 
   onStatusChange(event: Event): void {
@@ -186,3 +234,4 @@ export class GameDetail {
     });
   }
 }
+

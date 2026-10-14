@@ -1,4 +1,3 @@
-
 @if (errorMessage()) {
 <main>
   <p class="error">{{ errorMessage() }}</p>
@@ -75,8 +74,8 @@
           <a
             routerLink="/login"
             [queryParams]="{
-                  returnUrl: '/games/' + currentGame.id + '?from=' + backLink.route.substring(1)
-                }"
+              returnUrl: '/games/' + currentGame.id + '?from=' + backLink.route.substring(1)
+            }"
           >
             Inicia sesión
           </a>
@@ -101,13 +100,13 @@
         <label for="game-rating">Mi puntuación (1-10):</label>
         <select
           id="game-rating"
-          [value]="selectedRating() ?? ''"
-          (change)="onRatingChange($event)"
+          [ngModel]="selectedRating()"
+          (ngModelChange)="selectedRating.set($event)"
           [disabled]="isUpdating() || isDeleting()"
         >
-          <option value="">Sin puntuación</option>
+          <option [ngValue]="null">Sin puntuación</option>
           @for (rating of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track rating) {
-          <option [value]="rating">{{ rating }}</option>
+          <option [ngValue]="rating">{{ rating }}</option>
           }
         </select>
 
@@ -172,5 +171,3 @@
   <p>Cargando juego...</p>
 </main>
 }
-
-
