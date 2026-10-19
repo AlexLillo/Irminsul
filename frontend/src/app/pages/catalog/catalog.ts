@@ -82,12 +82,12 @@ export class Catalog {
           const bHasRating =
             b.averageRating !== null && b.ratingCount > 0;
 
-          // Los juegos sin valoraciones siempre quedan al final.
+          // Games without ratings are always placed at the end.
           if (aHasRating !== bHasRating) {
             return aHasRating ? -1 : 1;
           }
 
-          // Si ninguno tiene valoración, ordenamos por título.
+          // If neither game has a rating, sort by title.
           if (!aHasRating || !bHasRating) {
             return a.title.localeCompare(b.title);
           }
@@ -101,7 +101,7 @@ export class Catalog {
               : ratingDifference;
           }
 
-          // Desempate por número de valoraciones y luego por título.
+          // Break ties by rating count, then by title.
           const countDifference = b.ratingCount - a.ratingCount;
 
           if (countDifference !== 0) {
@@ -126,7 +126,7 @@ export class Catalog {
       },
       error: () => {
         this.errorMessage.set(
-          'No se ha podido cargar el catálogo. Inténtalo de nuevo más tarde.'
+          'Unable to load the catalog. Please try again later.'
         );
         this.isLoading.set(false);
       }

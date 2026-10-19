@@ -26,10 +26,10 @@ export class Home {
   sortOption = signal<SortOption>('title-asc');
 
   statuses: { value: GameStatus; label: string }[] = [
-    { value: 'BACKLOG', label: 'Por jugar' },
-    { value: 'PLAYING', label: 'Jugando' },
-    { value: 'COMPLETED', label: 'Completado' },
-    { value: 'DROPPED', label: 'Abandonado' }
+    {value: 'BACKLOG', label: 'Backlog'},
+    {value: 'PLAYING', label: 'Playing'},
+    {value: 'COMPLETED', label: 'Completed'},
+    {value: 'DROPPED', label: 'Dropped'}
   ];
 
   filteredGames = computed(() => {
@@ -54,7 +54,7 @@ export class Home {
 
         case 'rating-highest':
         case 'rating-lowest': {
-          // Los juegos sin puntuación quedan al final en ambos órdenes.
+          // Games without ratings are always placed at the end.
           if (a.rating === null && b.rating !== null) return 1;
           if (a.rating !== null && b.rating === null) return -1;
 
@@ -84,7 +84,7 @@ export class Home {
       },
       error: () => {
         this.errorMessage.set(
-          'No se ha podido cargar tu biblioteca. Inténtalo de nuevo más tarde.'
+          'Unable to load your library. Please try again later.'
         );
         this.isLoading.set(false);
       }

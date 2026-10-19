@@ -1,10 +1,9 @@
-
 <main>
-  <h1>Iniciar sesión</h1>
+  <h1>Log In</h1>
 
   <form #loginForm="ngForm" (ngSubmit)="submitLogin(loginForm)">
     <label>
-      Usuario
+      Username
       <input
         type="text"
         [(ngModel)]="username"
@@ -16,7 +15,7 @@
     </label>
 
     <label>
-      Contraseña
+      Password
       <input
         type="password"
         [(ngModel)]="password"
@@ -28,7 +27,7 @@
     </label>
 
     <button type="submit" [disabled]="isLoading()">
-      {{ isLoading() ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+      {{ isLoading() ? 'Logging in...' : 'Log In' }}
     </button>
   </form>
 

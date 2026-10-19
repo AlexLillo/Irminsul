@@ -11,28 +11,28 @@
   <a
     [routerLink]="['/games', gameId()]"
     [queryParams]="{ from: context() }"
-    [attr.aria-label]="'Ver detalles de ' + title()"
+    [attr.aria-label]="'View details for ' + title()"
   >
     <img
       [src]="coverUrl()"
-      [alt]="'Portada de ' + title()"
+      [alt]="'Cover art for ' + title()"
     >
   </a>
 
   @if (context() === 'catalog') {
   @if (averageRating() !== null && ratingCount() > 0) {
   <p class="community-rating">
-    <strong>{{ averageRating()!.toLocaleString('es-ES', {
+    <strong>{{ averageRating()!.toLocaleString('en-US', {
       minimumFractionDigits: 1,
       maximumFractionDigits: 1
       }) }}/10</strong>
     <span>
           · {{ ratingCount() }}
-          {{ ratingCount() === 1 ? 'valoración' : 'valoraciones' }}
+          {{ ratingCount() === 1 ? 'rating' : 'ratings' }}
         </span>
   </p>
   } @else {
-  <p class="community-rating no-rating">Sin valoraciones</p>
+  <p class="community-rating no-rating">No ratings yet</p>
   }
 
   @if (genre()) {
@@ -41,7 +41,7 @@
 
   @if (platforms().length > 0) {
   <p>
-    Plataformas:
+    Platforms:
     @for (platform of platforms(); track platform.id) {
     {{ platform.name }}@if (!$last) {, }
     }
@@ -55,9 +55,9 @@
   }
 
   @if (rating() !== undefined && rating() !== null) {
-  <p>Mi puntuación: {{ rating() }}/10</p>
+  <p>My rating: {{ rating() }}/10</p>
   } @else {
-  <p>Sin puntuación</p>
+  <p>Not rated</p>
   }
 
   @if (notes()) {

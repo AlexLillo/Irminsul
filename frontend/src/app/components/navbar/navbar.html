@@ -1,15 +1,14 @@
-
 <nav>
   <a routerLink="/" class="brand">Irminsul</a>
 
   <div class="links">
-    <a routerLink="/">Catálogo</a>
+    <a routerLink="/">Catalog</a>
 
     @if (authService.isLoggedIn()) {
-    <a routerLink="/home">Mi biblioteca</a>
-    <a (click)="logout()">Cerrar sesión</a>
+    <a routerLink="/home">My Library</a>
+    <a (click)="logout()">Log Out</a>
     } @else {
-    <a routerLink="/login">Iniciar sesión</a>
+    <a routerLink="/login">Log In</a>
     }
   </div>
 </nav>

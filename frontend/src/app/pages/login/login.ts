@@ -1,4 +1,3 @@
-
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -26,7 +25,7 @@ export class Login {
     this.errorMessage.set('');
 
     if (form.invalid) {
-      this.errorMessage.set('Introduce tu usuario y contraseña.');
+      this.errorMessage.set('Please enter your username and password.');
       return;
     }
 
@@ -56,14 +55,14 @@ export class Login {
         this.authService.logout();
 
         if (error.status === 401 || error.status === 403) {
-          this.errorMessage.set('Usuario o contraseña incorrectos.');
+          this.errorMessage.set('Incorrect username or password.');
         } else if (error.status === 0) {
           this.errorMessage.set(
-            'No se ha podido conectar con el servidor. Inténtalo de nuevo más tarde.'
+            'Unable to connect to the server. Please try again later.'
           );
         } else {
           this.errorMessage.set(
-            'Ha ocurrido un error al iniciar sesión. Inténtalo de nuevo.'
+            'An error occurred while logging in. Please try again.'
           );
         }
 

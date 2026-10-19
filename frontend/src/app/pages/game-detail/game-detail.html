@@ -15,45 +15,45 @@
   <article>
     <img
       [src]="currentGame.coverUrl"
-      [alt]="'Portada de ' + currentGame.title"
+      [alt]="'Cover art for ' + currentGame.title"
     >
 
     <div class="details">
       <h1>{{ currentGame.title }}</h1>
 
       <section class="community-rating">
-        <h2>Valoración de la comunidad</h2>
+        <h2>Community Rating</h2>
 
         @if (currentGame.averageRating !== null && currentGame.ratingCount > 0) {
         <p class="average-rating">
-          {{ currentGame.averageRating.toLocaleString('es-ES', {
+          {{ currentGame.averageRating.toLocaleString('en-US', {
           minimumFractionDigits: 1,
           maximumFractionDigits: 1
           }) }}/10
         </p>
         <p>
           {{ currentGame.ratingCount }}
-          {{ currentGame.ratingCount === 1 ? 'valoración' : 'valoraciones' }}
+          {{ currentGame.ratingCount === 1 ? 'rating' : 'ratings' }}
         </p>
         } @else {
-        <p>Sin valoraciones todavía.</p>
+        <p>No ratings yet.</p>
         }
       </section>
 
-      <p><strong>Género:</strong> {{ currentGame.genre }}</p>
+      <p><strong>Genre:</strong> {{ currentGame.genre }}</p>
 
       <p>
-        <strong>Fecha de lanzamiento:</strong>
-        {{ currentGame.releaseDate || 'Desconocida' }}
+        <strong>Release date:</strong>
+        {{ currentGame.releaseDate || 'Unknown' }}
       </p>
 
       <p>
-        <strong>Descripción:</strong>
-        {{ currentGame.description || 'Sin descripción disponible.' }}
+        <strong>Description:</strong>
+        {{ currentGame.description || 'No description available.' }}
       </p>
 
       <section>
-        <h2>Plataformas</h2>
+        <h2>Platforms</h2>
 
         @if (currentGame.platforms.length > 0) {
         <ul>
@@ -62,12 +62,12 @@
           }
         </ul>
         } @else {
-        <p>Sin plataformas registradas.</p>
+        <p>No platforms listed.</p>
         }
       </section>
 
       <section>
-        <h2>Mi biblioteca</h2>
+        <h2>My Library</h2>
 
         @if (!isLoggedIn()) {
         <p>
@@ -77,47 +77,47 @@
               returnUrl: '/games/' + currentGame.id + '?from=' + backLink.route.substring(1)
             }"
           >
-            Inicia sesión
+            Log in
           </a>
-          para añadir este juego a tu biblioteca.
+          to add this game to your library.
         </p>
         } @else if (userGame()) {
-        <p>Este juego ya está en tu biblioteca.</p>
+        <p>This game is already in your library.</p>
 
-        <label for="game-status">Estado:</label>
+        <label for="game-status">Status:</label>
         <select
           id="game-status"
           [value]="selectedStatus()"
           (change)="onStatusChange($event)"
           [disabled]="isUpdating() || isDeleting()"
         >
-          <option value="BACKLOG">Pendiente</option>
-          <option value="PLAYING">Jugando</option>
-          <option value="COMPLETED">Completado</option>
-          <option value="DROPPED">Abandonado</option>
+          <option value="BACKLOG">Backlog</option>
+          <option value="PLAYING">Playing</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="DROPPED">Dropped</option>
         </select>
 
-        <label for="game-rating">Mi puntuación (1-10):</label>
+        <label for="game-rating">My rating (1–10):</label>
         <select
           id="game-rating"
           [ngModel]="selectedRating()"
           (ngModelChange)="selectedRating.set($event)"
           [disabled]="isUpdating() || isDeleting()"
         >
-          <option [ngValue]="null">Sin puntuación</option>
+          <option [ngValue]="null">Not rated</option>
           @for (rating of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track rating) {
           <option [ngValue]="rating">{{ rating }}</option>
           }
         </select>
 
-        <label for="game-notes">Mis notas:</label>
+        <label for="game-notes">My notes:</label>
         <textarea
           id="game-notes"
           rows="4"
           [value]="selectedNotes()"
           (input)="onNotesChange($event)"
           [disabled]="isUpdating() || isDeleting()"
-          placeholder="¿Qué te está pareciendo este juego?"
+          placeholder="What do you think of this game?"
         ></textarea>
 
         <button
@@ -125,7 +125,7 @@
           (click)="updateGameStatus()"
           [disabled]="isUpdating() || isDeleting()"
         >
-          {{ isUpdating() ? 'Guardando...' : 'Guardar cambios' }}
+          {{ isUpdating() ? 'Saving...' : 'Save changes' }}
         </button>
 
         <button
@@ -134,20 +134,20 @@
           (click)="deleteFromLibrary()"
           [disabled]="isUpdating() || isDeleting()"
         >
-          {{ isDeleting() ? 'Eliminando...' : 'Eliminar de mi biblioteca' }}
+          {{ isDeleting() ? 'Removing...' : 'Remove from my library' }}
         </button>
         } @else {
-        <label for="new-game-status">Estado inicial:</label>
+        <label for="new-game-status">Initial status:</label>
         <select
           id="new-game-status"
           [value]="selectedStatus()"
           (change)="onStatusChange($event)"
           [disabled]="isAdding()"
         >
-          <option value="BACKLOG">Pendiente</option>
-          <option value="PLAYING">Jugando</option>
-          <option value="COMPLETED">Completado</option>
-          <option value="DROPPED">Abandonado</option>
+          <option value="BACKLOG">Backlog</option>
+          <option value="PLAYING">Playing</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="DROPPED">Dropped</option>
         </select>
 
         <button
@@ -155,7 +155,7 @@
           (click)="addToLibrary()"
           [disabled]="isAdding()"
         >
-          {{ isAdding() ? 'Añadiendo...' : 'Añadir a mi biblioteca' }}
+          {{ isAdding() ? 'Adding...' : 'Add to my library' }}
         </button>
         }
 
@@ -168,6 +168,6 @@
 </main>
 } @else {
 <main>
-  <p>Cargando juego...</p>
+  <p>Loading game...</p>
 </main>
 }

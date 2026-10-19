@@ -26,8 +26,8 @@ export class GameDetail {
   private source = this.route.snapshot.queryParamMap.get('from');
 
   backLink = this.source === 'home'
-    ? { label: '← Volver a mi biblioteca', route: '/home' }
-    : { label: '← Volver al catálogo', route: '/catalog' };
+    ? { label: '← Back to my library', route: '/home' }
+    : { label: '← Back to catalog', route: '/catalog' };
 
   isUpdating = signal(false);
   selectedRating = signal<number | null>(null);
@@ -82,7 +82,7 @@ export class GameDetail {
 
       if (result.gameError) {
         this.errorMessage.set(
-          'No se ha podido encontrar el juego.'
+          'Unable to find the game.'
         );
         return;
       }
@@ -116,7 +116,7 @@ export class GameDetail {
       catchError(error => {
         if (error.status !== 404) {
           this.libraryError.set(
-            'No se ha podido comprobar si el juego está en tu biblioteca.'
+            'Unable to check whether this game is in your library.'
           );
         }
 
@@ -162,7 +162,7 @@ export class GameDetail {
       },
       error: () => {
         this.libraryError.set(
-          'No se ha podido añadir el juego a tu biblioteca. Inténtalo de nuevo.'
+          'Unable to add the game to your library. Please try again.'
         );
         this.isAdding.set(false);
       }
@@ -192,7 +192,7 @@ export class GameDetail {
       },
       error: () => {
         this.libraryError.set(
-          'No se ha podido actualizar el estado del juego. Inténtalo de nuevo.'
+          'Unable to update the game status. Please try again.'
         );
         this.isUpdating.set(false);
       }
@@ -207,7 +207,7 @@ export class GameDetail {
     }
 
     const confirmed = confirm(
-      `¿Quieres eliminar "${currentGame.title}" de tu biblioteca?`
+      `Do you want to remove "${currentGame.title}" from your library?`
     );
 
     if (!confirmed) {
@@ -227,11 +227,10 @@ export class GameDetail {
       },
       error: () => {
         this.libraryError.set(
-          'No se ha podido eliminar el juego de tu biblioteca. Inténtalo de nuevo.'
+          'Unable to remove the game from your library. Please try again.'
         );
         this.isDeleting.set(false);
       }
     });
   }
 }
-

@@ -4,35 +4,35 @@
 </header>
 
 <main>
-  <h2>Mi biblioteca</h2>
+  <h2>My Library</h2>
 
   @if (errorMessage()) {
   <p class="error">{{ errorMessage() }}</p>
   } @else if (isLoading()) {
-  <p>Cargando tu biblioteca...</p>
+  <p>Loading your library...</p>
   } @else if (games().length === 0) {
-  <p>Aún no tienes juegos en tu biblioteca.</p>
+  <p>You don't have any games in your library yet.</p>
   } @else {
-  <section class="filters" aria-label="Filtros de mi biblioteca">
+  <section class="filters" aria-label="My library filters">
     <div class="filter-field search-field">
-      <label for="game-search">Buscar por título</label>
+      <label for="game-search">Search by title</label>
       <input
         id="game-search"
         type="search"
-        placeholder="Ej. Zelda..."
+        placeholder="e.g. Zelda..."
         [value]="searchTerm()"
         (input)="searchTerm.set($any($event.target).value)"
       >
     </div>
 
     <div class="filter-field">
-      <label for="status-filter">Estado</label>
+      <label for="status-filter">Status</label>
       <select
         id="status-filter"
         [value]="selectedStatus()"
         (change)="selectedStatus.set($any($event.target).value)"
       >
-        <option value="">Todos los estados</option>
+        <option value="">All statuses</option>
         @for (status of statuses; track status.value) {
         <option [value]="status.value">{{ status.label }}</option>
         }
@@ -40,16 +40,16 @@
     </div>
 
     <div class="filter-field">
-      <label for="sort-filter">Ordenar por</label>
+      <label for="sort-filter">Sort by</label>
       <select
         id="sort-filter"
         [value]="sortOption()"
         (change)="sortOption.set($any($event.target).value)"
       >
-        <option value="title-asc">Título (A–Z)</option>
-        <option value="title-desc">Título (Z–A)</option>
-        <option value="rating-highest">Puntuación (mayor a menor)</option>
-        <option value="rating-lowest">Puntuación (menor a mayor)</option>
+        <option value="title-asc">Title (A–Z)</option>
+        <option value="title-desc">Title (Z–A)</option>
+        <option value="rating-highest">Rating (highest first)</option>
+        <option value="rating-lowest">Rating (lowest first)</option>
       </select>
     </div>
 
@@ -58,21 +58,21 @@
       class="reset-button"
       (click)="resetFilters()"
     >
-      Restablecer filtros
+      Reset filters
     </button>
   </section>
 
   <p class="results-count" aria-live="polite">
     {{ filteredGames().length }}
-    {{ filteredGames().length === 1 ? 'juego encontrado' : 'juegos encontrados' }}
+    {{ filteredGames().length === 1 ? 'game found' : 'games found' }}
   </p>
 
   @if (filteredGames().length === 0) {
   <p class="empty-results">
-    No hay juegos que coincidan con los criterios seleccionados.
+    No games match the selected criteria.
   </p>
   } @else {
-  <section class="game-grid" aria-label="Juegos de mi biblioteca">
+  <section class="game-grid" aria-label="Games in my library">
     @for (game of filteredGames(); track game.gameId) {
     <app-game-card
       [gameId]="game.gameId"
@@ -88,4 +88,3 @@
   }
   }
 </main>
-
