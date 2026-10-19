@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { UserGame } from './user-game';
+import { provideHttpClient } from '@angular/common/http';
+import { UserGameService } from './user-game.service';
 
-describe('UserGame', () => {
-  let service: UserGame;
+describe('UserGameService', () => {
+  let service: UserGameService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(UserGame);
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient()]
+    });
+    service = TestBed.inject(UserGameService);
   });
 
   it('should be created', () => {
