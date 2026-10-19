@@ -1,41 +1,138 @@
-import { Service, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  Observable,
+  catchError,
+  map,
+  of,
+  switchMap,
+  tap,
+  throwError
+} from 'rxjs';
 
-@Service()
+export type UserRole = 'USER' | 'ADMIN';
+
+export interface AuthenticatedUser {
+  id: number;
+  username: string;
+  role: UserRole;
+}
+
+interface CsrfResponse {
+  token: string;
+  headerName: string;
+}
+
+const API_URL = 'http://localhost:8080/api';
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
+  private readonly http = inject(HttpClient);
 
-  private username: string | null = null;
-  private password: string | null = null;
-  private http = inject(HttpClient);
-  isLoggedIn = signal(false);
+  readonly isLoggedIn = signal(false);
+  readonly role = signal<UserRole | null>(null);
+  readonly currentUser = signal<AuthenticatedUser | null>(null);
 
-  login(username: string, password: string): void {
-    this.username = username;
-    this.password = password;
-    this.isLoggedIn.set(true);
+  login(username: string, password: string): Observable<AuthenticatedUser> {
+    return this.getCsrfToken().pipe(
+      switchMap(csrf =>
+        this.http.post<AuthenticatedUser>(
+          `${API_URL}/auth/login`,
+          { username, password },
+          {
+            headers: new HttpHeaders({
+              [csrf.headerName]: csrf.token
+            }),
+            withCredentials: true
+          }
+        )
+      ),
+      switchMap(user =>
+        // Refresh the CSRF token after authentication.
+        this.getCsrfToken().pipe(map(() => user))
+      ),
+      tap(user => this.setAuthenticatedUser(user)),
+      catchError(error => {
+        this.clearLocalSession();
+        return throwError(() => error);
+      })
+    );
   }
 
-  logout(): void {
-    this.username = null;
-    this.password = null;
-    this.isLoggedIn.set(false);
+  restoreSession(): Observable<void> {
+    return this.getCsrfToken().pipe(
+      switchMap(() =>
+        this.http.get<AuthenticatedUser>(
+          `${API_URL}/users/me`,
+          { withCredentials: true }
+        )
+      ),
+      tap(user => this.setAuthenticatedUser(user)),
+      map(() => undefined),
+      catchError(() => {
+        this.clearLocalSession();
+        return of(undefined);
+      })
+    );
+  }
+
+  logout(): Observable<void> {
+    return this.getCsrfToken().pipe(
+      switchMap(csrf =>
+        this.http.post<void>(
+          `${API_URL}/auth/logout`,
+          {},
+          {
+            headers: new HttpHeaders({
+              [csrf.headerName]: csrf.token
+            }),
+            withCredentials: true
+          }
+        )
+      ),
+      tap(() => this.clearLocalSession()),
+      catchError(error => {
+        this.clearLocalSession();
+        return throwError(() => error);
+      })
+    );
+  }
+
+  validateCredentials(): Observable<AuthenticatedUser> {
+    return this.http.get<AuthenticatedUser>(
+      `${API_URL}/users/me`,
+      { withCredentials: true }
+    ).pipe(
+      tap(user => this.setAuthenticatedUser(user))
+    );
   }
 
   isAuthenticated(): boolean {
     return this.isLoggedIn();
   }
 
-  getAuthorizationHeader(): string | null {
-    if (!this.isAuthenticated()) {
-      return null;
-    }
-
-    const credentials = `${this.username}:${this.password}`;
-    return `Basic ${btoa(credentials)}`;
+  isAdmin(): boolean {
+    return this.role() === 'ADMIN';
   }
 
-  validateCredentials(): Observable<void> {
-    return this.http.get<void>('http://localhost:8080/api/user-games/me');
+  private getCsrfToken(): Observable<CsrfResponse> {
+    return this.http.get<CsrfResponse>(
+      `${API_URL}/auth/csrf`,
+      { withCredentials: true }
+    );
+  }
+
+  private setAuthenticatedUser(user: AuthenticatedUser): void {
+    this.currentUser.set(user);
+    this.isLoggedIn.set(true);
+    this.role.set(user.role);
+  }
+
+  private clearLocalSession(): void {
+    this.currentUser.set(null);
+    this.isLoggedIn.set(false);
+    this.role.set(null);
   }
 }

@@ -10,10 +10,17 @@ import { AuthService } from '../../services/auth.service';
 })
 export class Navbar {
   authService = inject(AuthService);
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('Error logging out:', error);
+        this.router.navigate(['/']);
+      }
+    });
   }
 }

@@ -1,8 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,9 +12,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './login.css'
 })
 export class Login {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   username = '';
   password = '';
@@ -25,7 +26,9 @@ export class Login {
     this.errorMessage.set('');
 
     if (form.invalid) {
-      this.errorMessage.set('Please enter your username and password.');
+      this.errorMessage.set(
+        'Please enter your username and password.'
+      );
       return;
     }
 
@@ -38,24 +41,29 @@ export class Login {
 
   login(): void {
     this.isLoading.set(true);
-    this.authService.login(this.username, this.password);
+    this.errorMessage.set('');
 
-    this.authService.validateCredentials().subscribe({
+    this.authService.login(this.username, this.password).subscribe({
       next: () => {
         this.isLoading.set(false);
+        this.password = '';
 
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-        const destination = returnUrl?.startsWith('/') && !returnUrl.startsWith('//')
-          ? returnUrl
-          : '/home';
+        const returnUrl =
+          this.route.snapshot.queryParamMap.get('returnUrl');
+
+        const destination =
+          returnUrl?.startsWith('/') && !returnUrl.startsWith('//')
+            ? returnUrl
+            : '/home';
 
         this.router.navigateByUrl(destination);
       },
-      error: (error: HttpErrorResponse) => {
-        this.authService.logout();
 
+      error: (error: HttpErrorResponse) => {
         if (error.status === 401 || error.status === 403) {
-          this.errorMessage.set('Incorrect username or password.');
+          this.errorMessage.set(
+            'Incorrect username or password.'
+          );
         } else if (error.status === 0) {
           this.errorMessage.set(
             'Unable to connect to the server. Please try again later.'

@@ -44,6 +44,11 @@ public class UserService {
                 .map(this::toResponseDTO);
     }
 
+    public Optional<UserResponseDTO> findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(this::toResponseDTO);
+    }
+
     public UserResponseDTO save(UserRequestDTO userRequestDTO) {
         if (userRepository.existsByUsername(userRequestDTO.getUsername())) {
             throw new DuplicateResourceException(
