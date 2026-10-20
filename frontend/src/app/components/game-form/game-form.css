@@ -1,0 +1,191 @@
+:host {
+  display: block;
+}
+
+.game-form {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.75rem;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+}
+
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 1.7rem;
+}
+
+.form-header p:last-child {
+  margin: 0.75rem 0 0;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.form-field label,
+.platform-fieldset legend {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.7rem 0.8rem;
+  box-sizing: border-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field input:focus-visible,
+.form-field textarea:focus-visible,
+.form-field select:focus-visible {
+  outline: 2px solid #777;
+  outline-offset: 2px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field-error {
+  color: #c62828;
+}
+
+.platform-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+}
+
+.field-description {
+  margin: 0.5rem 0 1rem;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.platform-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.platform-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow-wrap: anywhere;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.platform-option input {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  accent-color: #242424;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+button {
+  min-height: 40px;
+  padding: 0.6rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid #777;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.primary-button {
+  background: #242424;
+  color: #fff;
+}
+
+.secondary-button {
+  border-color: #bdbdbd;
+  background: transparent;
+  color: inherit;
+}
+
+.error-message {
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #c62828;
+  border-radius: 8px;
+  color: #c62828;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .game-form {
+    padding: 1rem;
+  }
+
+  .form-row,
+  .platform-options {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}

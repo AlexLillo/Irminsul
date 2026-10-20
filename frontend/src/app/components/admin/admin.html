@@ -20,6 +20,13 @@
   </section>
 
   <section class="admin-games" aria-labelledby="games-heading">
+    @if (showGameForm()) {
+    <app-game-form
+      [game]="selectedGame()"
+      (saved)="onGameSaved($event)"
+      (cancelled)="cancelForm()"
+    />
+    } @else {
     <div class="section-header">
       <div>
         <h2 id="games-heading">Game Management</h2>
@@ -139,6 +146,7 @@
         </tbody>
       </table>
     </div>
+    }
     }
   </section>
 </main>

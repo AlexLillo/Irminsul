@@ -2,10 +2,11 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Game } from '../../models/game';
 import { GameService } from '../../services/game.service';
 import { PlatformService } from '../../services/platform.service';
+import { GameForm } from '../game-form/game-form';
 
 @Component({
   selector: 'app-admin',
-  imports: [],
+  imports: [GameForm],
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })
@@ -17,6 +18,8 @@ export class Admin {
   platformCount = signal(0);
 
   searchTerm = signal('');
+  showGameForm = signal(false);
+  selectedGame = signal<Game | null>(null);
 
   isLoading = signal(true);
   errorMessage = signal('');
@@ -65,15 +68,46 @@ export class Admin {
   }
 
   startCreating(): void {
-    this.actionMessage.set(
-      'The game creation form will be available in the next step.'
-    );
+    this.selectedGame.set(null);
+    this.actionMessage.set('');
+    this.errorMessage.set('');
+    this.showGameForm.set(true);
   }
 
   startEditing(game: Game): void {
-    this.actionMessage.set(
-      `The editing form for "${game.title}" will be available in the next step.`
-    );
+    this.selectedGame.set(game);
+    this.actionMessage.set('');
+    this.errorMessage.set('');
+    this.showGameForm.set(true);
+  }
+
+  cancelForm(): void {
+    this.showGameForm.set(false);
+    this.selectedGame.set(null);
+  }
+
+  onGameSaved(game: Game): void {
+    const wasEditing = this.selectedGame() !== null;
+
+    if (wasEditing) {
+      this.games.update(games =>
+        games.map(item => item.id === game.id ? game : item)
+      );
+
+      this.actionMessage.set(
+        `"${game.title}" was updated successfully.`
+      );
+    } else {
+      this.games.update(games => [...games, game]);
+
+      this.actionMessage.set(
+        `"${game.title}" was created successfully.`
+      );
+    }
+
+    this.showGameForm.set(false);
+    this.selectedGame.set(null);
+    this.searchTerm.set('');
   }
 
   deleteGame(game: Game): void {

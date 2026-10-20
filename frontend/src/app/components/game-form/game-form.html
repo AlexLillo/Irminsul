@@ -1,0 +1,164 @@
+<section class="game-form">
+  <header class="form-header">
+    <div>
+      <p class="eyebrow">GAME CATALOG</p>
+      <h2>{{ isEditing ? 'Edit game' : 'Add game' }}</h2>
+      <p>
+        {{
+        isEditing
+        ? 'Update the information for this game.'
+        : 'Add a new game to the Irminsul catalog.'
+        }}
+      </p>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+  <div class="error-message" role="alert">
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <form #gameForm="ngForm" (ngSubmit)="submit()">
+    <div class="form-field">
+      <label for="title">Title *</label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        [(ngModel)]="form.title"
+        required
+        maxlength="255"
+        #title="ngModel"
+      >
+
+      @if (title.invalid && title.touched) {
+      <small class="field-error">
+        A title is required.
+      </small>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        [(ngModel)]="form.description"
+        rows="4"
+      ></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label for="releaseDate">Release date</label>
+        <input
+          id="releaseDate"
+          name="releaseDate"
+          type="date"
+          [(ngModel)]="form.releaseDate"
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="genre">Genre *</label>
+        <select
+          id="genre"
+          name="genre"
+          [(ngModel)]="form.genre"
+          required
+          #genre="ngModel"
+        >
+          <option value="" disabled>Select a genre</option>
+
+          @for (item of genres; track item) {
+          <option [value]="item">{{ item }}</option>
+          }
+        </select>
+
+        @if (genre.invalid && genre.touched) {
+        <small class="field-error">
+          Select a genre.
+        </small>
+        }
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="coverUrl">Cover image URL</label>
+      <input
+        id="coverUrl"
+        name="coverUrl"
+        type="url"
+        [(ngModel)]="form.coverUrl"
+        placeholder="https://example.com/game-cover.jpg"
+        #coverUrl="ngModel"
+      >
+
+      @if (coverUrl.invalid && coverUrl.touched) {
+      <small class="field-error">
+        Enter a valid URL or leave the field empty.
+      </small>
+      }
+    </div>
+
+    <fieldset class="platform-fieldset">
+      <legend>Platforms</legend>
+      <p class="field-description">
+        Select all platforms this game is available on.
+      </p>
+
+      @if (isLoadingPlatforms()) {
+      <p>Loading platforms...</p>
+      } @else if (platforms.length === 0) {
+      <p>No platforms are available.</p>
+      } @else {
+      <div class="platform-options">
+        @for (platform of platforms; track platform.id) {
+        <label class="platform-option">
+          <input
+            type="checkbox"
+            [checked]="isPlatformSelected(platform.id)"
+            (change)="togglePlatform(
+                  platform.id,
+                  $any($event.target).checked
+                )"
+          >
+          <span>{{ platform.name }}</span>
+        </label>
+        }
+      </div>
+      }
+    </fieldset>
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="secondary-button"
+        [disabled]="isSaving()"
+        (click)="cancelled.emit()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="primary-button"
+        [disabled]="
+          gameForm.invalid ||
+          isSaving() ||
+          isLoadingPlatforms() ||
+          platforms.length === 0
+        "
+      >
+        {{
+        isSaving()
+        ? 'Saving...'
+        : isEditing
+        ? 'Save changes'
+        : 'Create game'
+        }}
+      </button>
+    </div>
+  </form>
+</section>
