@@ -1,0 +1,144 @@
+<main class="admin-page">
+  <header class="admin-header">
+    <p class="eyebrow">IRMINSUL / ADMINISTRATION</p>
+    <h1>Administration</h1>
+    <p class="admin-description">
+      Manage the game catalog and the platforms available in Irminsul.
+    </p>
+  </header>
+
+  <section class="admin-overview" aria-label="Catalog overview">
+    <article class="overview-card">
+      <span class="overview-label">Games in catalog</span>
+      <strong class="overview-value">{{ games().length }}</strong>
+    </article>
+
+    <article class="overview-card">
+      <span class="overview-label">Available platforms</span>
+      <strong class="overview-value">{{ platformCount() }}</strong>
+    </article>
+  </section>
+
+  <section class="admin-games" aria-labelledby="games-heading">
+    <div class="section-header">
+      <div>
+        <h2 id="games-heading">Game Management</h2>
+        <p>Manage the games available in the catalog.</p>
+      </div>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="startCreating()"
+      >
+        + Add game
+      </button>
+    </div>
+
+    @if (actionMessage()) {
+    <div class="action-message" role="status">
+      <p>{{ actionMessage() }}</p>
+      <button
+        type="button"
+        class="text-button"
+        (click)="actionMessage.set('')"
+      >
+        Dismiss
+      </button>
+    </div>
+    }
+
+    @if (errorMessage()) {
+    <div class="error-message" role="alert">
+      <p>{{ errorMessage() }}</p>
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="loadGames()"
+      >
+        Retry loading games
+      </button>
+    </div>
+    }
+
+    <div class="catalog-toolbar">
+      <label class="search-field">
+        <span>Search games</span>
+        <input
+          type="search"
+          placeholder="Search by title..."
+          [value]="searchTerm()"
+          (input)="searchTerm.set($any($event.target).value)"
+        >
+      </label>
+
+      <p class="results-count" aria-live="polite">
+        {{ filteredGames().length }}
+        {{ filteredGames().length === 1 ? 'game' : 'games' }}
+      </p>
+    </div>
+
+    @if (isLoading()) {
+    <p class="loading-message">Loading games...</p>
+    } @else if (games().length === 0 && !errorMessage()) {
+    <div class="empty-state">
+      <h3>No games in the catalog yet</h3>
+      <p>Add the first game to get started.</p>
+    </div>
+    } @else if (filteredGames().length === 0) {
+    <div class="empty-state">
+      <h3>No games found</h3>
+      <p>Try a different title or clear your search.</p>
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="searchTerm.set('')"
+      >
+        Clear search
+      </button>
+    </div>
+    } @else {
+    <div class="table-container">
+      <table class="games-table">
+        <thead>
+        <tr>
+          <th scope="col">Game title</th>
+          <th scope="col">Genre</th>
+          <th scope="col" class="actions-column">Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @for (game of filteredGames(); track game.id) {
+        <tr>
+          <td class="game-title">{{ game.title }}</td>
+          <td class="game-genre">{{ game.genre }}</td>
+          <td>
+            <div class="game-actions">
+              <button
+                type="button"
+                class="secondary-button"
+                (click)="startEditing(game)"
+                [attr.aria-label]="'Edit ' + game.title"
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                class="danger-button"
+                (click)="deleteGame(game)"
+                [attr.aria-label]="'Delete ' + game.title"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+    }
+  </section>
+</main>

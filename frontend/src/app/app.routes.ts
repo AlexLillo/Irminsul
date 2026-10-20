@@ -5,6 +5,7 @@ import { Catalog } from './pages/catalog/catalog';
 import { GameDetail } from './pages/game-detail/game-detail';
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
+import { Admin } from './components/admin/admin';
 
 export const routes: Routes = [
   { path: '', component: Catalog },
@@ -14,7 +15,7 @@ export const routes: Routes = [
   { path: 'games/:id', component: GameDetail },
   {
     path: 'admin',
-    canActivate: [adminGuard],
-    component: Catalog
+    component: Admin,
+    canActivate: [adminGuard]
   }
 ];

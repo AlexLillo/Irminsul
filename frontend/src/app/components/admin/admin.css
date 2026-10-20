@@ -1,0 +1,311 @@
+:host {
+  display: block;
+}
+
+.admin-page {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+.admin-header {
+  margin-bottom: 2rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.admin-description {
+  max-width: 600px;
+  margin-top: 1rem;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+/* Catalog overview */
+
+.admin-overview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.overview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+}
+
+.overview-label {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.overview-value {
+  font-size: 2rem;
+}
+
+/* Game management */
+
+.admin-games h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-header p {
+  margin: 0.5rem 0 0;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.catalog-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: min(100%, 420px);
+}
+
+.search-field span {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.search-field input {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.search-field input:focus-visible {
+  outline: 2px solid #777;
+  outline-offset: 2px;
+}
+
+.results-count {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+/* Games table */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+}
+
+.games-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.games-table th,
+.games-table td {
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+}
+
+.games-table thead {
+  background: #f3f3f3;
+  color: #242424;
+}
+
+.games-table th {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.games-table tbody tr + tr {
+  border-top: 1px solid #e2e2e2;
+}
+
+.games-table tbody tr:hover {
+  background: #f8f8f8;
+}
+
+.game-title {
+  min-width: 220px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.game-genre {
+  min-width: 130px;
+}
+
+.actions-column {
+  width: 190px;
+}
+
+.game-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Buttons */
+
+button {
+  min-height: 38px;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid #777;
+  outline-offset: 3px;
+}
+
+.primary-button {
+  background: #242424;
+  color: #fff;
+}
+
+.secondary-button {
+  border-color: #bdbdbd;
+  background: transparent;
+  color: inherit;
+}
+
+.danger-button {
+  border-color: #c62828;
+  background: transparent;
+  color: #c62828;
+}
+
+.text-button {
+  padding: 0.25rem 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* Feedback and empty states */
+
+.action-message,
+.error-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+}
+
+.action-message p,
+.error-message p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.error-message {
+  border-color: #c62828;
+  color: #c62828;
+}
+
+.loading-message,
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+}
+
+.empty-state h3 {
+  margin-top: 0;
+}
+
+.empty-state p {
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+/* Responsive layout */
+
+@media (max-width: 650px) {
+  .admin-page {
+    padding: 2rem 0;
+  }
+
+  .admin-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .catalog-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  .results-count {
+    margin-bottom: 0;
+  }
+
+  .games-table th,
+  .games-table td {
+    padding: 0.8rem;
+  }
+
+  .game-title {
+    min-width: 170px;
+  }
+
+  .game-actions {
+    flex-wrap: wrap;
+  }
+}

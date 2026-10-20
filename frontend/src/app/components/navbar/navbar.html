@@ -6,6 +6,11 @@
 
     @if (authService.isLoggedIn()) {
     <a routerLink="/home">My Library</a>
+
+    @if (authService.isAdmin()) {
+    <a routerLink="/admin">Administration</a>
+    }
+
     <a (click)="logout()">Log Out</a>
     } @else {
     <a routerLink="/login">Log In</a>
