@@ -149,4 +149,140 @@
     }
     }
   </section>
+
+  <section class="admin-platforms" aria-labelledby="platforms-heading">
+    <div class="section-header">
+      <div>
+        <h2 id="platforms-heading">Platform Management</h2>
+        <p>Manage the platforms available when adding or editing games.</p>
+      </div>
+
+      @if (!showPlatformForm()) {
+      <button
+        type="button"
+        class="primary-button"
+        (click)="startCreatingPlatform()"
+      >
+        + Add platform
+      </button>
+      }
+    </div>
+
+    @if (platformActionMessage()) {
+    <div class="action-message" role="status">
+      <p>{{ platformActionMessage() }}</p>
+      <button
+        type="button"
+        class="text-button"
+        (click)="platformActionMessage.set('')"
+      >
+        Dismiss
+      </button>
+    </div>
+    }
+
+    @if (platformErrorMessage()) {
+    <div class="error-message" role="alert">
+      <p>{{ platformErrorMessage() }}</p>
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="loadPlatforms()"
+      >
+        Retry loading platforms
+      </button>
+    </div>
+    }
+
+    @if (showPlatformForm()) {
+    <form
+      class="platform-form"
+      (submit)="$event.preventDefault(); savePlatform()"
+    >
+      <h3>
+        {{ selectedPlatformId() === null ? 'Add Platform' : 'Edit Platform' }}
+      </h3>
+
+      <label class="search-field platform-name-field">
+        <span>Platform name</span>
+        <input
+          type="text"
+          placeholder="e.g. PlayStation 5"
+          maxlength="50"
+          required
+          [value]="platformName()"
+          (input)="platformName.set($any($event.target).value)"
+        >
+      </label>
+
+      <div class="platform-form-actions">
+        <button
+          type="submit"
+          class="primary-button"
+          [disabled]="!platformName().trim() || isSavingPlatform()"
+        >
+          {{ isSavingPlatform() ? 'Saving...' : 'Save platform' }}
+        </button>
+
+        <button
+          type="button"
+          class="secondary-button"
+          [disabled]="isSavingPlatform()"
+          (click)="cancelPlatformForm()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+    }
+
+    @if (isLoadingPlatforms()) {
+    <p class="loading-message">Loading platforms...</p>
+    } @else if (platforms().length === 0 && !platformErrorMessage()) {
+    <div class="empty-state">
+      <h3>No platforms available</h3>
+      <p>Add a platform before creating games for it.</p>
+    </div>
+    } @else if (platforms().length > 0) {
+    <div class="table-container">
+      <table class="games-table">
+        <thead>
+        <tr>
+          <th scope="col">Platform name</th>
+          <th scope="col" class="actions-column">Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @for (platform of platforms(); track platform.id) {
+        <tr>
+          <td class="game-title">{{ platform.name }}</td>
+          <td>
+            <div class="game-actions">
+              <button
+                type="button"
+                class="secondary-button"
+                (click)="startEditingPlatform(platform)"
+                [attr.aria-label]="'Edit ' + platform.name"
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                class="danger-button"
+                (click)="deletePlatform(platform)"
+                [attr.aria-label]="'Delete ' + platform.name"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+    }
+  </section>
 </main>

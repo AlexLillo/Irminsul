@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { Game } from '../../models/game';
+import { Game, Platform } from '../../models/game';
 import { GameService } from '../../services/game.service';
 import { PlatformService } from '../../services/platform.service';
 import { GameForm } from '../game-form/game-form';
@@ -15,15 +15,25 @@ export class Admin {
   private platformService = inject(PlatformService);
 
   games = signal<Game[]>([]);
-  platformCount = signal(0);
+  platforms = signal<Platform[]>([]);
+  platformCount = computed(() => this.platforms().length);
 
   searchTerm = signal('');
   showGameForm = signal(false);
   selectedGame = signal<Game | null>(null);
 
+  showPlatformForm = signal(false);
+  selectedPlatformId = signal<number | null>(null);
+  platformName = signal('');
+
   isLoading = signal(true);
+  isLoadingPlatforms = signal(true);
+  isSavingPlatform = signal(false);
+
   errorMessage = signal('');
   actionMessage = signal('');
+  platformErrorMessage = signal('');
+  platformActionMessage = signal('');
 
   filteredGames = computed(() => {
     const search = this.searchTerm().trim().toLocaleLowerCase();
@@ -56,13 +66,20 @@ export class Admin {
     });
   }
 
-  private loadPlatforms(): void {
+  loadPlatforms(): void {
+    this.isLoadingPlatforms.set(true);
+    this.platformErrorMessage.set('');
+
     this.platformService.getPlatforms().subscribe({
       next: platforms => {
-        this.platformCount.set(platforms.length);
+        this.platforms.set(platforms);
+        this.isLoadingPlatforms.set(false);
       },
       error: () => {
-        this.platformCount.set(0);
+        this.platformErrorMessage.set(
+          'Unable to load platforms. Please try again later.'
+        );
+        this.isLoadingPlatforms.set(false);
       }
     });
   }
@@ -135,6 +152,117 @@ export class Admin {
       error: () => {
         this.errorMessage.set(
           `Unable to delete "${game.title}". It may be referenced by other records.`
+        );
+      }
+    });
+  }
+
+  startCreatingPlatform(): void {
+    this.selectedPlatformId.set(null);
+    this.platformName.set('');
+    this.platformActionMessage.set('');
+    this.platformErrorMessage.set('');
+    this.showPlatformForm.set(true);
+  }
+
+  startEditingPlatform(platform: Platform): void {
+    this.selectedPlatformId.set(platform.id);
+    this.platformName.set(platform.name);
+    this.platformActionMessage.set('');
+    this.platformErrorMessage.set('');
+    this.showPlatformForm.set(true);
+  }
+
+  cancelPlatformForm(): void {
+    this.showPlatformForm.set(false);
+    this.selectedPlatformId.set(null);
+    this.platformName.set('');
+    this.isSavingPlatform.set(false);
+  }
+
+  savePlatform(): void {
+    const name = this.platformName().trim();
+
+    if (!name || this.isSavingPlatform()) {
+      return;
+    }
+
+    this.platformErrorMessage.set('');
+    this.platformActionMessage.set('');
+    this.isSavingPlatform.set(true);
+
+    const platformId = this.selectedPlatformId();
+    const request = { name };
+
+    const operation = platformId === null
+      ? this.platformService.createPlatform(request)
+      : this.platformService.updatePlatform(platformId, request);
+
+    operation.subscribe({
+      next: platform => {
+        if (platformId === null) {
+          this.platforms.update(platforms => [...platforms, platform]);
+          this.platformActionMessage.set(
+            `"${platform.name}" was created successfully.`
+          );
+        } else {
+          this.platforms.update(platforms =>
+            platforms.map(item =>
+              item.id === platform.id ? platform : item
+            )
+          );
+          this.platformActionMessage.set(
+            `"${platform.name}" was updated successfully.`
+          );
+        }
+
+        this.cancelPlatformForm();
+      },
+      error: error => {
+        this.isSavingPlatform.set(false);
+
+        if (error.status === 409) {
+          this.platformErrorMessage.set(
+            'A platform with this name already exists.'
+          );
+        } else if (error.status === 400) {
+          this.platformErrorMessage.set(
+            'Please enter a valid platform name (up to 50 characters).'
+          );
+        } else {
+          this.platformErrorMessage.set(
+            'Unable to save the platform. Please try again.'
+          );
+        }
+      }
+    });
+  }
+
+  deletePlatform(platform: Platform): void {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${platform.name}"?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.platformErrorMessage.set('');
+    this.platformActionMessage.set('');
+
+    this.platformService.deletePlatform(platform.id).subscribe({
+      next: () => {
+        this.platforms.update(platforms =>
+          platforms.filter(item => item.id !== platform.id)
+        );
+
+        this.platformActionMessage.set(
+          `"${platform.name}" was deleted successfully.`
+        );
+      },
+      error: () => {
+        this.platformErrorMessage.set(
+          `Unable to delete "${platform.name}". It may be used by one or more games.`
         );
       }
     });
