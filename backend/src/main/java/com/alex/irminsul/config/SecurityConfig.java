@@ -91,37 +91,25 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                HttpMethod.GET, "/api/auth/csrf").permitAll()
-                        .requestMatchers(
-                                HttpMethod.POST, "/api/auth/login").permitAll()
-                        .requestMatchers(
-                                HttpMethod.POST, "/api/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/csrf").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
 
-                        .requestMatchers(
-                                HttpMethod.POST, "/api/users").permitAll()
-                        .requestMatchers(
-                                HttpMethod.GET, "/api/users/me").authenticated()
-                        .requestMatchers(
-                                HttpMethod.GET, "/api/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/users", "/api/users/**").hasRole("ADMIN")
 
-                        .requestMatchers(
-                                HttpMethod.GET, "/api/games/**").permitAll()
-                        .requestMatchers(
-                                HttpMethod.POST, "/api/games").hasRole("ADMIN")
-                        .requestMatchers(
-                                HttpMethod.PUT, "/api/games/**").hasRole("ADMIN")
-                        .requestMatchers(
-                                HttpMethod.DELETE, "/api/games/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/games/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/games").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/games/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/games/**").hasRole("ADMIN")
 
-                        .requestMatchers(
-                                HttpMethod.GET, "/api/platforms/**").authenticated()
-                        .requestMatchers(
-                                HttpMethod.POST, "/api/platforms").hasRole("ADMIN")
-                        .requestMatchers(
-                                HttpMethod.PUT, "/api/platforms/**").hasRole("ADMIN")
-                        .requestMatchers(
-                                HttpMethod.DELETE, "/api/platforms/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/platforms/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/platforms").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/platforms/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/platforms/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/user-games/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/user-games", "/api/user-games/user/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 );
