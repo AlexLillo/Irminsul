@@ -13,10 +13,17 @@
     [queryParams]="{ from: context() }"
     [attr.aria-label]="'View details for ' + title()"
   >
+    @if (coverUrl(); as cover) {
     <img
-      [src]="coverUrl()"
+      [src]="cover"
       [alt]="'Cover art for ' + title()"
     >
+    } @else {
+    <div class="cover-placeholder" role="img"
+         [attr.aria-label]="'No cover available for ' + title()">
+      No cover
+    </div>
+    }
   </a>
 
   @if (context() === 'catalog') {

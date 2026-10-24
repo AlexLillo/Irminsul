@@ -70,10 +70,18 @@ export class Catalog {
           return b.title.localeCompare(a.title);
 
         case 'release-newest':
-          return b.releaseDate.localeCompare(a.releaseDate);
+        case 'release-oldest': {
+          if (!a.releaseDate || !b.releaseDate) {
+            if (!a.releaseDate && !b.releaseDate) {
+              return a.title.localeCompare(b.title);
+            }
+            return a.releaseDate ? -1 : 1;
+          }
 
-        case 'release-oldest':
-          return a.releaseDate.localeCompare(b.releaseDate);
+          return sort === 'release-newest'
+            ? b.releaseDate.localeCompare(a.releaseDate)
+            : a.releaseDate.localeCompare(b.releaseDate);
+        }
 
         case 'rating-highest':
         case 'rating-lowest': {

@@ -7,7 +7,7 @@ export type GameStatus = 'BACKLOG' | 'PLAYING' | 'COMPLETED' | 'DROPPED';
 export interface UserGame {
   gameId: number;
   gameTitle: string;
-  gameCoverUrl: string;
+  gameCoverUrl: string | null;
   status: GameStatus;
   rating: number | null;
   notes: string | null;

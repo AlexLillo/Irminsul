@@ -18,6 +18,7 @@ public class Game {
     @Column(nullable = false, unique = true, length = 200)
     private String title;
 
+    @Column(length = 2000)
     private String description;
 
     private LocalDate releaseDate;

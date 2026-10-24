@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { GameForm } from './game-form';
 
 describe('GameForm', () => {
@@ -8,6 +10,10 @@ describe('GameForm', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GameForm],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(GameForm);

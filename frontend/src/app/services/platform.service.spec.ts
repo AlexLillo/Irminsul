@@ -1,12 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { Platform } from './platform';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { PlatformService } from './platform.service';
 
-describe('Platform', () => {
-  let service: Platform;
+describe('PlatformService', () => {
+  let service: PlatformService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Platform);
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()]
+    });
+    service = TestBed.inject(PlatformService);
   });
 
   it('should be created', () => {

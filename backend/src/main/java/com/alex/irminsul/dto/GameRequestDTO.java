@@ -2,6 +2,8 @@ package com.alex.irminsul.dto;
 
 import com.alex.irminsul.entity.Genre;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -9,14 +11,18 @@ import java.util.Set;
 public class GameRequestDTO {
 
     @NotBlank
+    @Size(max = 200)
     private String title;
 
+    @Size(max = 2000)
     private String description;
 
     private LocalDate releaseDate;
 
+    @Size(max = 255)
     private String coverUrl;
 
+    @NotNull
     private Genre genre;
 
     private Set<Long> platformIds;

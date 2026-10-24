@@ -29,6 +29,7 @@ public class UserGame {
     @Max(10)
     private Integer rating;
 
+    @Column(length = 1000)
     private String notes;
 
     public User getUser() {
