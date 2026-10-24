@@ -1,0 +1,93 @@
+<main>
+  <h1>Sign Up</h1>
+
+  <form #registerForm="ngForm" (ngSubmit)="submitRegister(registerForm)">
+    <label>
+      Username
+      <input
+        type="text"
+        name="username"
+        [(ngModel)]="form.username"
+        #usernameField="ngModel"
+        required
+        minlength="3"
+        maxlength="50"
+        autocomplete="username"
+        [disabled]="isLoading()"
+      >
+    </label>
+    @if (usernameField.invalid && usernameField.touched) {
+    <small class="field-error">
+      Username must be between 3 and 50 characters.
+    </small>
+    }
+
+    <label>
+      Email
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="form.email"
+        #emailField="ngModel"
+        required
+        email
+        maxlength="150"
+        autocomplete="email"
+        [disabled]="isLoading()"
+      >
+    </label>
+    @if (emailField.invalid && emailField.touched) {
+    <small class="field-error">Enter a valid email address.</small>
+    }
+
+    <label>
+      Password
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="form.password"
+        #passwordField="ngModel"
+        required
+        minlength="8"
+        maxlength="72"
+        autocomplete="new-password"
+        [disabled]="isLoading()"
+      >
+    </label>
+    @if (passwordField.invalid && passwordField.touched) {
+    <small class="field-error">
+      Password must be between 8 and 72 characters.
+    </small>
+    }
+
+    <label>
+      Confirm password
+      <input
+        type="password"
+        name="confirmPassword"
+        [(ngModel)]="form.confirmPassword"
+        #confirmField="ngModel"
+        required
+        autocomplete="new-password"
+        [disabled]="isLoading()"
+      >
+    </label>
+    @if (confirmField.touched && form.confirmPassword
+    && form.password !== form.confirmPassword) {
+    <small class="field-error">Passwords do not match.</small>
+    }
+
+    <button type="submit" [disabled]="isLoading()">
+      {{ isLoading() ? 'Creating account...' : 'Sign Up' }}
+    </button>
+  </form>
+
+  @if (errorMessage()) {
+  <p class="error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  <p>
+    Already have an account?
+    <a routerLink="/login">Log in</a>
+  </p>
+</main>

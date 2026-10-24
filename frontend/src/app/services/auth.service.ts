@@ -12,6 +12,12 @@ import {
 
 export type UserRole = 'USER' | 'ADMIN';
 
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+}
+
 export interface AuthenticatedUser {
   id: number;
   username: string;
@@ -58,6 +64,23 @@ export class AuthService {
         this.clearLocalSession();
         return throwError(() => error);
       })
+    );
+  }
+
+  register(request: RegisterRequest): Observable<AuthenticatedUser> {
+    return this.getCsrfToken().pipe(
+      switchMap(csrf =>
+        this.http.post<AuthenticatedUser>(
+          `${API_URL}/users`,
+          request,
+          {
+            headers: new HttpHeaders({
+              [csrf.headerName]: csrf.token
+            }),
+            withCredentials: true
+          }
+        )
+      )
     );
   }
 
