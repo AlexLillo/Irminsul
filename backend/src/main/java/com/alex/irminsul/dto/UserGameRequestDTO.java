@@ -4,6 +4,7 @@ import com.alex.irminsul.entity.Status;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class UserGameRequestDTO {
 
@@ -17,6 +18,7 @@ public class UserGameRequestDTO {
     @Max(10)
     private Integer rating;
 
+    @Size(max = 1000)
     private String notes;
 
     public UserGameRequestDTO() {

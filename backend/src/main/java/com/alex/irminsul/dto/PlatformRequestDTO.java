@@ -1,10 +1,12 @@
 package com.alex.irminsul.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class PlatformRequestDTO {
 
     @NotBlank
+    @Size(max = 50)
     private String name;
 
     public PlatformRequestDTO() {

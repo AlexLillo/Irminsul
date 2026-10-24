@@ -28,7 +28,7 @@
         type="text"
         [(ngModel)]="form.title"
         required
-        maxlength="255"
+        maxlength="200"
         #title="ngModel"
       >
 
@@ -44,6 +44,7 @@
       <textarea
         id="description"
         name="description"
+        maxlength="2000"
         [(ngModel)]="form.description"
         rows="4"
       ></textarea>
