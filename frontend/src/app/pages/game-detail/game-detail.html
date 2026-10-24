@@ -13,10 +13,14 @@
   </a>
 
   <article>
+    @if (currentGame.coverUrl) {
     <img
       [src]="currentGame.coverUrl"
       [alt]="'Cover art for ' + currentGame.title"
     >
+    } @else {
+    <div class="cover-placeholder" role="img">No cover</div>
+    }
 
     <div class="details">
       <h1>{{ currentGame.title }}</h1>

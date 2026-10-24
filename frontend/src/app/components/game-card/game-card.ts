@@ -12,7 +12,7 @@ import { GameStatus } from '../../services/user-game.service';
 export class GameCard {
   gameId = input.required<number>();
   title = input.required<string>();
-  coverUrl = input.required<string>();
+  coverUrl = input.required<string | null>();
   context = input.required<'catalog' | 'home'>();
 
   genre = input<string>();

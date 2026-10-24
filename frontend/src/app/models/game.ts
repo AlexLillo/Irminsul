@@ -1,9 +1,9 @@
 export interface Game {
   id: number;
   title: string;
-  description: string;
-  releaseDate: string;
-  coverUrl: string;
+  description: string | null;
+  releaseDate: string | null;
+  coverUrl: string | null;
   genre: string;
   platforms: Platform[];
   averageRating: number | null;
