@@ -1,8 +1,10 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Game, Platform } from '../../models/game';
 import { GameService } from '../../services/game.service';
 import { PlatformService } from '../../services/platform.service';
 import { GameForm } from '../game-form/game-form';
+
 
 @Component({
   selector: 'app-admin',
@@ -149,9 +151,11 @@ export class Admin {
           `"${game.title}" was deleted successfully.`
         );
       },
-      error: () => {
+      error: (error: HttpErrorResponse) => {
         this.errorMessage.set(
-          `Unable to delete "${game.title}". It may be referenced by other records.`
+          error.status === 409
+            ? (error.error?.error ?? `"${game.title}" is in users' libraries and cannot be deleted.`)
+            : `Unable to delete "${game.title}". Please try again.`
         );
       }
     });

@@ -187,6 +187,11 @@ public class GameService {
             return false;
         }
 
+        if (userGameRepository.existsByGameId(id)) {
+            throw new DuplicateResourceException(
+                    "Game is in one or more users' libraries and cannot be deleted");
+        }
+
         gameRepository.deleteById(id);
         return true;
     }

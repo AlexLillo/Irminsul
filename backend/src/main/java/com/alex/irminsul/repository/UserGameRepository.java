@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface UserGameRepository extends JpaRepository<UserGame, UserGameId> {
 
+    boolean existsByGameId(Long gameId);
+
     List<UserGame> findByUserId(Long userId);
 
     List<UserGame> findByUserUsername(String username);
