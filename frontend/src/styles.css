@@ -6,21 +6,21 @@
   color-scheme: dark;
 
   /* Surfaces */
-  --color-bg: #12151a;
-  --color-surface: #1a1e25;
-  --color-surface-raised: #232831;
-  --color-border: #2c323d;
+  --color-bg: #0f1213;
+  --color-surface: #171b1c;
+  --color-surface-raised: #202526;
+  --color-border: #2a3032;
 
   /* Text */
-  --color-text: #e8eaf0;
-  --color-text-muted: #9aa3b2;
+  --color-text: #e9eeeb;
+  --color-text-muted: #9aa6a0;
 
   /* Accent and feedback */
-  --color-accent: #6f8bff;
-  --color-accent-hover: #93a8ff;
-  --color-on-accent: #0e1117;
+  --color-accent: #3fcf8e;
+  --color-accent-hover: #6ee0ab;
+  --color-on-accent: #07120c;
   --color-danger: #ff6b6b;
-  --color-success: #4ade80;
+  --color-success: var(--color-accent);
   --color-warning: #fbbf24;
 
   /* Typography */
@@ -63,12 +63,15 @@ h1, h2, h3, h4 {
 }
 
 a {
-  color: var(--color-accent);
   text-decoration: none;
   transition: color var(--transition);
 }
 
-a:hover {
+a:not(.btn) {
+  color: var(--color-accent);
+}
+
+a:not(.btn):hover {
   color: var(--color-accent-hover);
 }
 
