@@ -196,6 +196,7 @@
 
     @if (showPlatformForm()) {
     <form
+      #platformFormElement
       class="platform-form"
       (submit)="$event.preventDefault(); savePlatform()"
     >

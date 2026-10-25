@@ -12,11 +12,7 @@ import com.alex.irminsul.repository.PlatformRepository;
 import com.alex.irminsul.repository.UserGameRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +41,10 @@ public class GameService {
                         platform.getId(),
                         platform.getName()
                 ))
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparing(
+                        PlatformResponseDTO::getName,
+                        String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
         GameResponseDTO dto = new GameResponseDTO(
                 game.getId(),

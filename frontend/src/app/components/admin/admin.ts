@@ -1,4 +1,13 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  inject,
+  signal,
+  viewChild
+} from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Game, Platform } from '../../models/game';
 import { GameService } from '../../services/game.service';
@@ -15,6 +24,9 @@ import { GameForm } from '../game-form/game-form';
 export class Admin {
   private gameService = inject(GameService);
   private platformService = inject(PlatformService);
+  private injector = inject(Injector);
+  private platformFormElement =
+    viewChild<ElementRef<HTMLElement>>('platformFormElement');
 
   games = signal<Game[]>([]);
   platforms = signal<Platform[]>([]);
@@ -167,6 +179,7 @@ export class Admin {
     this.platformActionMessage.set('');
     this.platformErrorMessage.set('');
     this.showPlatformForm.set(true);
+    this.focusPlatformForm();
   }
 
   startEditingPlatform(platform: Platform): void {
@@ -175,6 +188,17 @@ export class Admin {
     this.platformActionMessage.set('');
     this.platformErrorMessage.set('');
     this.showPlatformForm.set(true);
+    this.focusPlatformForm();
+  }
+
+  private focusPlatformForm(): void {
+    afterNextRender(() => {
+      const form = this.platformFormElement()?.nativeElement;
+
+      form?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      form?.querySelector<HTMLInputElement>('input')
+        ?.focus({ preventScroll: true });
+    }, { injector: this.injector });
   }
 
   cancelPlatformForm(): void {

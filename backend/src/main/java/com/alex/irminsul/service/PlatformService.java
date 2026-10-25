@@ -6,6 +6,7 @@ import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.exception.DuplicateResourceException;
 import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +33,8 @@ public class PlatformService {
     }
 
     public List<PlatformResponseDTO> findAll() {
-        return platformRepository.findAll()
+        return platformRepository
+                .findAll(Sort.by(Sort.Order.asc("name").ignoreCase()))
                 .stream()
                 .map(this::toResponseDTO)
                 .toList();
