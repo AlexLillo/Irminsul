@@ -1,39 +1,86 @@
-nav {
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.navbar {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid #ddd;
-  background-color: white;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  width: min(var(--content-width), 100% - 2rem);
+  min-height: 60px;
+  margin-inline: auto;
+  padding-block: 0.5rem;
 }
 
-a {
-  color: #222;
-  text-decoration: none;
+.navbar .brand {
+  color: var(--color-text);
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
 }
 
-a:hover {
-  color: #555;
-}
-
-.brand {
-  font-size: 1.4rem;
-  font-weight: bold;
+.navbar .brand:hover {
+  color: var(--color-accent);
 }
 
 .links {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.links a:not(.btn),
+.logout {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color var(--transition), background var(--transition);
+}
+
+.links a:not(.btn):hover,
+.logout:hover {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+}
+
+.links a.active:not(.btn) {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+}
+
+.logout {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.links .btn {
+  min-height: 36px;
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.9rem;
 }
 
 @media (max-width: 480px) {
-  nav {
-    padding: 1rem;
-    gap: 1rem;
+  .navbar .brand {
+    font-size: 1.15rem;
   }
 
-  .links {
-    gap: 0.75rem;
+  .links .btn {
+    margin-left: 0.25rem;
   }
 }

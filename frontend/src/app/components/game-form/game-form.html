@@ -135,7 +135,7 @@
     <div class="form-actions">
       <button
         type="button"
-        class="secondary-button"
+        class="btn"
         [disabled]="isSaving()"
         (click)="cancelled.emit()"
       >
@@ -144,7 +144,7 @@
 
       <button
         type="submit"
-        class="primary-button"
+        class="btn btn-primary"
         [disabled]="
           gameForm.invalid ||
           isSaving() ||

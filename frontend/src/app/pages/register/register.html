@@ -1,10 +1,11 @@
-<main>
+<main class="auth-card">
   <h1>Sign Up</h1>
 
   <form #registerForm="ngForm" (ngSubmit)="submitRegister(registerForm)">
-    <label>
-      Username
+    <div class="form-field">
+      <label for="register-username">Username</label>
       <input
+        id="register-username"
         type="text"
         name="username"
         [(ngModel)]="form.username"
@@ -15,16 +16,17 @@
         autocomplete="username"
         [disabled]="isLoading()"
       >
-    </label>
-    @if (usernameField.invalid && usernameField.touched) {
-    <small class="field-error">
-      Username must be between 3 and 50 characters.
-    </small>
-    }
+      @if (usernameField.invalid && usernameField.touched) {
+      <small class="field-error">
+        Username must be between 3 and 50 characters.
+      </small>
+      }
+    </div>
 
-    <label>
-      Email
+    <div class="form-field">
+      <label for="register-email">Email</label>
       <input
+        id="register-email"
         type="email"
         name="email"
         [(ngModel)]="form.email"
@@ -35,14 +37,15 @@
         autocomplete="email"
         [disabled]="isLoading()"
       >
-    </label>
-    @if (emailField.invalid && emailField.touched) {
-    <small class="field-error">Enter a valid email address.</small>
-    }
+      @if (emailField.invalid && emailField.touched) {
+      <small class="field-error">Enter a valid email address.</small>
+      }
+    </div>
 
-    <label>
-      Password
+    <div class="form-field">
+      <label for="register-password">Password</label>
       <input
+        id="register-password"
         type="password"
         name="password"
         [(ngModel)]="form.password"
@@ -53,16 +56,17 @@
         autocomplete="new-password"
         [disabled]="isLoading()"
       >
-    </label>
-    @if (passwordField.invalid && passwordField.touched) {
-    <small class="field-error">
-      Password must be between 8 and 72 characters.
-    </small>
-    }
+      @if (passwordField.invalid && passwordField.touched) {
+      <small class="field-error">
+        Password must be between 8 and 72 characters.
+      </small>
+      }
+    </div>
 
-    <label>
-      Confirm password
+    <div class="form-field">
+      <label for="register-confirm">Confirm password</label>
       <input
+        id="register-confirm"
         type="password"
         name="confirmPassword"
         [(ngModel)]="form.confirmPassword"
@@ -71,13 +75,13 @@
         autocomplete="new-password"
         [disabled]="isLoading()"
       >
-    </label>
-    @if (confirmField.touched && form.confirmPassword
-    && form.password !== form.confirmPassword) {
-    <small class="field-error">Passwords do not match.</small>
-    }
+      @if (confirmField.touched && form.confirmPassword
+      && form.password !== form.confirmPassword) {
+      <small class="field-error">Passwords do not match.</small>
+      }
+    </div>
 
-    <button type="submit" [disabled]="isLoading()">
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
       {{ isLoading() ? 'Creating account...' : 'Sign Up' }}
     </button>
   </form>
@@ -86,7 +90,7 @@
   <p class="error" role="alert">{{ errorMessage() }}</p>
   }
 
-  <p>
+  <p class="auth-switch">
     Already have an account?
     <a routerLink="/login">Log in</a>
   </p>

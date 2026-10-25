@@ -1,1 +1,382 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   Irminsul: global styles
+
+   1. Design tokens
+   2. Base
+   3. Form controls
+   4. Buttons
+   5. Messages and states
+   6. Utilities
+   7. Page layout
+   8. Collection pages (catalog and library)
+   9. Login and register card
+   10. Reduced motion
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Design tokens
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --color-bg: #0f1213;
+  --color-surface: #171b1c;
+  --color-surface-raised: #202526;
+  --color-border: #2a3032;
+
+  /* Text */
+  --color-text: #e9eeeb;
+  --color-text-muted: #9aa6a0;
+
+  /* Accent and feedback */
+  --color-accent: #3fcf8e;
+  --color-accent-hover: #6ee0ab;
+  --color-on-accent: #07120c;
+  --color-danger: #ff6b6b;
+  --color-success: var(--color-accent);
+  --color-warning: #fbbf24;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+  Arial, sans-serif;
+
+  /* Shape, elevation and motion */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --shadow-card: 0 4px 16px rgb(0 0 0 / 0.35);
+  --transition: 0.15s ease;
+
+  /* Layout */
+  --content-width: 1200px;
+}
+
+/* ==========================================================================
+   2. Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.25;
+}
+
+a {
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:not(.btn) {
+  color: var(--color-accent);
+}
+
+a:not(.btn):hover {
+  color: var(--color-accent-hover);
+}
+
+img {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+/* ==========================================================================
+   3. Form controls
+   ========================================================================== */
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+input:not([type='checkbox']):not([type='radio']),
+select,
+textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+
+textarea {
+  resize: vertical;
+}
+
+::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Label above a control (.filter-field is used by the catalog and library) */
+
+.filter-field,
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.filter-field label,
+.form-field label {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.field-error {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   4. Buttons (use as class="btn", class="btn btn-primary", etc.)
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition),
+  color var(--transition);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--color-border);
+}
+
+.btn-primary {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  border-color: var(--color-accent-hover);
+  background: var(--color-accent-hover);
+}
+
+.btn-danger {
+  border-color: var(--color-danger);
+  background: transparent;
+  color: var(--color-danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--color-danger);
+  color: var(--color-on-accent);
+}
+
+/* ==========================================================================
+   5. Messages and states
+   ========================================================================== */
+
+.error {
+  padding: 1rem;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  background: rgb(255 107 107 / 0.08);
+  color: var(--color-danger);
+}
+
+.state-message,
+.empty-results {
+  padding: 1.5rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ==========================================================================
+   6. Utilities
+   ========================================================================== */
+
+/* Small text above a title */
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Text for screen readers only */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   7. Page layout
+   ========================================================================== */
+
+.page {
+  width: min(var(--content-width), 100% - 2rem);
+  margin-inline: auto;
+  padding-block: 2rem;
+}
+
+.page-header {
+  margin-bottom: 1.75rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   8. Collection pages (catalog and library)
+   ========================================================================== */
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.results-count {
+  margin: 0 0 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .filters {
+    padding: 1rem;
+  }
+}
+
+/* ==========================================================================
+   9. Login and register card
+   ========================================================================== */
+
+.auth-card {
+  width: min(440px, 100% - 2rem);
+  margin: 3rem auto;
+  padding: 1.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.auth-card h1 {
+  margin: 0 0 1.5rem;
+  font-size: 1.7rem;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-card .btn {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.auth-card .error {
+  margin: 1.25rem 0 0;
+}
+
+.auth-card .auth-switch {
+  margin: 1.25rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    margin: 1.5rem auto;
+    padding: 1.25rem;
+  }
+}
+
+/* ==========================================================================
+   10. Reduced motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

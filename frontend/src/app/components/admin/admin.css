@@ -3,33 +3,25 @@
 }
 
 .admin-page {
-  width: min(1100px, calc(100% - 2rem));
+  width: min(var(--content-width), 100% - 2rem);
   margin: 0 auto;
-  padding: 3rem 0;
+  padding: 2.5rem 0 3rem;
 }
 
 .admin-header {
   margin-bottom: 2rem;
 }
 
-.eyebrow {
-  margin: 0 0 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  opacity: 0.7;
-}
-
 .admin-header h1 {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2rem, 5vw, 2.75rem);
 }
 
 .admin-description {
   max-width: 600px;
-  margin-top: 1rem;
+  margin: 0.75rem 0 0;
+  color: var(--color-text-muted);
   line-height: 1.6;
-  opacity: 0.8;
 }
 
 /* Catalog overview */
@@ -44,26 +36,34 @@
 .overview-card {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.5rem;
-  border: 1px solid #d8d8d8;
-  border-radius: 12px;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
 }
 
 .overview-label {
-  font-size: 0.9rem;
-  opacity: 0.75;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
 }
 
 .overview-value {
-  font-size: 2rem;
+  color: var(--color-accent);
+  font-size: 2.2rem;
+  line-height: 1;
 }
 
-/* Game management */
+/* Sections */
 
-.admin-games h2 {
+.admin-games h2,
+.admin-platforms h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+}
+
+.admin-platforms {
+  margin-top: 3rem;
 }
 
 .section-header {
@@ -75,9 +75,9 @@
 }
 
 .section-header p {
-  margin: 0.5rem 0 0;
+  margin: 0.4rem 0 0;
+  color: var(--color-text-muted);
   line-height: 1.5;
-  opacity: 0.8;
 }
 
 .catalog-toolbar {
@@ -91,46 +91,31 @@
 .search-field {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
   width: min(100%, 420px);
 }
 
 .search-field span {
-  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
   font-weight: 600;
-}
-
-.search-field input {
-  width: 100%;
-  min-height: 42px;
-  padding: 0.65rem 0.8rem;
-  border: 1px solid #bdbdbd;
-  border-radius: 6px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  box-sizing: border-box;
-}
-
-.search-field input:focus-visible {
-  outline: 2px solid #777;
-  outline-offset: 2px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .results-count {
   margin: 0 0 0.75rem;
-  font-size: 0.9rem;
-  opacity: 0.75;
   white-space: nowrap;
 }
 
-/* Games table */
+/* Tables */
 
 .table-container {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid #d8d8d8;
-  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
 }
 
 .games-table {
@@ -141,26 +126,28 @@
 
 .games-table th,
 .games-table td {
-  padding: 1rem 1.25rem;
+  padding: 0.9rem 1.25rem;
   vertical-align: middle;
 }
 
 .games-table thead {
-  background: #f3f3f3;
-  color: #242424;
+  background: var(--color-surface-raised);
 }
 
 .games-table th {
-  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
   font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .games-table tbody tr + tr {
-  border-top: 1px solid #e2e2e2;
+  border-top: 1px solid var(--color-border);
 }
 
 .games-table tbody tr:hover {
-  background: #f8f8f8;
+  background: var(--color-surface-raised);
 }
 
 .game-title {
@@ -171,6 +158,10 @@
 
 .game-genre {
   min-width: 130px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .actions-column {
@@ -183,46 +174,17 @@
   gap: 0.5rem;
 }
 
-/* Buttons */
-
-button {
-  min-height: 38px;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button:focus-visible {
-  outline: 3px solid #777;
-  outline-offset: 3px;
-}
-
-.primary-button {
-  background: #242424;
-  color: #fff;
-}
-
-.secondary-button {
-  border-color: #bdbdbd;
-  background: transparent;
-  color: inherit;
-}
-
-.danger-button {
-  border-color: #c62828;
-  background: transparent;
-  color: #c62828;
+.game-actions .btn {
+  min-height: 34px;
+  padding: 0.35rem 0.8rem;
 }
 
 .text-button {
-  padding: 0.25rem 0;
+  padding: 0.25rem 0.5rem;
+  border: 0;
   background: transparent;
-  color: inherit;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 /* Feedback and empty states */
@@ -235,8 +197,19 @@ button:focus-visible {
   gap: 1rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  border: 1px solid #bdbdbd;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.action-message {
+  border-color: color-mix(in srgb, var(--color-success) 50%, transparent);
+  background: color-mix(in srgb, var(--color-success) 8%, transparent);
+}
+
+.error-message {
+  border-color: var(--color-danger);
+  background: rgb(255 107 107 / 0.08);
+  color: var(--color-danger);
 }
 
 .action-message p,
@@ -245,26 +218,46 @@ button:focus-visible {
   line-height: 1.5;
 }
 
-.error-message {
-  border-color: #c62828;
-  color: #c62828;
-}
-
 .loading-message,
 .empty-state {
   padding: 2rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
   text-align: center;
-  border: 1px solid #d8d8d8;
-  border-radius: 12px;
 }
 
 .empty-state h3 {
   margin-top: 0;
+  color: var(--color-text);
 }
 
 .empty-state p {
+  margin: 0 0 1rem;
+}
+
+/* Platform form */
+
+.platform-form {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.platform-form h3 {
+  margin: 0 0 1.25rem;
+}
+
+.platform-name-field {
   margin-bottom: 1rem;
-  opacity: 0.8;
+}
+
+.platform-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 /* Responsive layout */
@@ -308,41 +301,4 @@ button:focus-visible {
   .game-actions {
     flex-wrap: wrap;
   }
-}
-
-/* Platform management */
-
-.admin-platforms {
-  margin-top: 3rem;
-}
-
-.admin-platforms h2 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.platform-form {
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
-  border: 1px solid #d8d8d8;
-  border-radius: 10px;
-}
-
-.platform-form h3 {
-  margin: 0 0 1.25rem;
-}
-
-.platform-name-field {
-  margin-bottom: 1rem;
-}
-
-.platform-form-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
 }
