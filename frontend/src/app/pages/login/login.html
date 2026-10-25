@@ -1,10 +1,11 @@
-<main>
+<main class="auth-card">
   <h1>Log In</h1>
 
   <form #loginForm="ngForm" (ngSubmit)="submitLogin(loginForm)">
-    <label>
-      Username
+    <div class="form-field">
+      <label for="login-username">Username</label>
       <input
+        id="login-username"
         type="text"
         [(ngModel)]="username"
         name="username"
@@ -12,11 +13,12 @@
         autocomplete="username"
         [disabled]="isLoading()"
       >
-    </label>
+    </div>
 
-    <label>
-      Password
+    <div class="form-field">
+      <label for="login-password">Password</label>
       <input
+        id="login-password"
         type="password"
         [(ngModel)]="password"
         name="password"
@@ -24,17 +26,18 @@
         autocomplete="current-password"
         [disabled]="isLoading()"
       >
-    </label>
+    </div>
 
-    <button type="submit" [disabled]="isLoading()">
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
       {{ isLoading() ? 'Logging in...' : 'Log In' }}
     </button>
   </form>
 
   @if (errorMessage()) {
-  <p class="error">{{ errorMessage() }}</p>
+  <p class="error" role="alert">{{ errorMessage() }}</p>
   }
-  <p>
+
+  <p class="auth-switch">
     Don't have an account?
     <a routerLink="/register">Sign up</a>
   </p>
