@@ -1,75 +1,75 @@
-<article>
-  <h3>
-    <a
-      [routerLink]="['/games', gameId()]"
-      [queryParams]="{ from: context() }"
-    >
-      {{ title() }}
-    </a>
-  </h3>
-
-  <a
-    [routerLink]="['/games', gameId()]"
-    [queryParams]="{ from: context() }"
-    [attr.aria-label]="'View details for ' + title()"
-  >
+<article class="card">
+  <div class="cover">
     @if (coverUrl(); as cover) {
-    <img
-      [src]="cover"
-      [alt]="'Cover art for ' + title()"
-    >
+    <img [src]="cover" alt="" loading="lazy">
     } @else {
-    <div class="cover-placeholder" role="img"
-         [attr.aria-label]="'No cover available for ' + title()">
-      No cover
-    </div>
+    <div class="cover-placeholder" aria-hidden="true">No cover</div>
     }
-  </a>
 
-  @if (context() === 'catalog') {
-  @if (averageRating() !== null && ratingCount() > 0) {
-  <p class="community-rating">
-    <strong>{{ averageRating()!.toLocaleString('en-US', {
-      minimumFractionDigits: 1,
-      maximumFractionDigits: 1
-      }) }}/10</strong>
-    <span>
-          · {{ ratingCount() }}
-          {{ ratingCount() === 1 ? 'rating' : 'ratings' }}
-        </span>
-  </p>
-  } @else {
-  <p class="community-rating no-rating">No ratings yet</p>
-  }
-
-  @if (genre()) {
-  <p>{{ genre() }}</p>
-  }
-
-  @if (platforms().length > 0) {
-  <p>
-    Platforms:
-    @for (platform of platforms(); track platform.id) {
-    {{ platform.name }}@if (!$last) {, }
+    @if (context() === 'catalog' && averageRating() !== null && ratingCount() > 0) {
+    <span class="badge">
+      <span class="visually-hidden">Average rating: </span>
+      &#9733; {{ averageRating()!.toLocaleString('en-US', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }) }}
+    </span>
     }
-  </p>
-  }
-  }
 
-  @if (context() === 'home') {
-  @if (status()) {
-  <span class="status">{{ status() }}</span>
-  }
+    @if (context() === 'home' && rating() !== undefined && rating() !== null) {
+    <span class="badge">
+      <span class="visually-hidden">My rating: </span>
+      &#9733; {{ rating() }}
+    </span>
+    }
+  </div>
 
-  @if (rating() !== undefined && rating() !== null) {
-  <p>My rating: {{ rating() }}/10</p>
-  } @else {
-  <p>Not rated</p>
-  }
+  <div class="info">
+    <h3 class="title">
+      <a
+        [routerLink]="['/games', gameId()]"
+        [queryParams]="{ from: context() }"
+      >{{ title() }}</a>
+    </h3>
 
-  @if (notes()) {
-  <p>{{ notes() }}</p>
-  }
-  }
+    @if (context() === 'catalog') {
+    <p class="meta">
+      @if (genre()) {
+      <span class="genre">{{ genre() }}</span>
+      }
+      @if (ratingCount() > 0) {
+      <span>
+        {{ ratingCount() }}
+        {{ ratingCount() === 1 ? 'rating' : 'ratings' }}
+      </span>
+      } @else {
+      <span>No ratings yet</span>
+      }
+    </p>
+
+    @if (platforms().length > 0) {
+    <p class="platforms">
+      @for (platform of platforms(); track platform.id) {
+      {{ platform.name }}@if (!$last) {, }
+      }
+    </p>
+    }
+    }
+
+    @if (context() === 'home') {
+    @if (status(); as currentStatus) {
+    <span class="status" [attr.data-status]="currentStatus">
+      {{ statusLabels[currentStatus] }}
+    </span>
+    }
+
+    @if (rating() === undefined || rating() === null) {
+    <p class="meta"><span>Not rated</span></p>
+    }
+
+    @if (notes()) {
+    <p class="notes">{{ notes() }}</p>
+    }
+    }
+  </div>
 </article>
-

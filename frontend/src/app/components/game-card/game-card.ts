@@ -14,6 +14,12 @@ export class GameCard {
   title = input.required<string>();
   coverUrl = input.required<string | null>();
   context = input.required<'catalog' | 'home'>();
+  protected readonly statusLabels: Record<GameStatus, string> = {
+    BACKLOG: 'Backlog',
+    PLAYING: 'Playing',
+    COMPLETED: 'Completed',
+    DROPPED: 'Dropped'
+  };
 
   genre = input<string>();
   platforms = input<Platform[]>([]);
