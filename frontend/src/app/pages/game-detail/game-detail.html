@@ -1,80 +1,89 @@
 @if (errorMessage()) {
-<main>
-  <p class="error">{{ errorMessage() }}</p>
-
-  <a [routerLink]="backLink.route">
+<main class="page">
+  <a class="back-link" [routerLink]="backLink.route">
     {{ backLink.label }}
   </a>
+
+  <p class="error">{{ errorMessage() }}</p>
 </main>
 } @else if (game(); as currentGame) {
-<main>
-  <a [routerLink]="backLink.route">
+<main class="page">
+  <a class="back-link" [routerLink]="backLink.route">
     {{ backLink.label }}
   </a>
 
-  <article>
-    @if (currentGame.coverUrl) {
-    <img
-      [src]="currentGame.coverUrl"
-      [alt]="'Cover art for ' + currentGame.title"
-    >
-    } @else {
-    <div class="cover-placeholder" role="img">No cover</div>
-    }
+  <article class="game">
+    <div class="cover">
+      @if (currentGame.coverUrl) {
+      <img
+        [src]="currentGame.coverUrl"
+        [alt]="'Cover art for ' + currentGame.title"
+      >
+      } @else {
+      <div class="cover-placeholder" role="img" aria-label="No cover available">
+        No cover
+      </div>
+      }
+    </div>
 
     <div class="details">
-      <h1>{{ currentGame.title }}</h1>
+      <header class="game-header">
+        <h1>{{ currentGame.title }}</h1>
+
+        <p class="game-meta">
+          <span class="genre">{{ currentGame.genre }}</span>
+          <span>{{ currentGame.releaseDate || 'Release date unknown' }}</span>
+        </p>
+      </header>
 
       <section class="community-rating">
-        <h2>Community Rating</h2>
+        <h2>Community rating</h2>
 
         @if (currentGame.averageRating !== null && currentGame.ratingCount > 0) {
         <p class="average-rating">
-          {{ currentGame.averageRating.toLocaleString('en-US', {
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 1
-          }) }}/10
+          <span class="score">
+            {{ currentGame.averageRating.toLocaleString('en-US', {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1
+            }) }}
+          </span>
+          <span class="out-of">/ 10</span>
         </p>
-        <p>
+        <p class="rating-count">
           {{ currentGame.ratingCount }}
           {{ currentGame.ratingCount === 1 ? 'rating' : 'ratings' }}
         </p>
         } @else {
-        <p>No ratings yet.</p>
+        <p class="muted">No ratings yet.</p>
         }
       </section>
 
-      <p><strong>Genre:</strong> {{ currentGame.genre }}</p>
-
-      <p>
-        <strong>Release date:</strong>
-        {{ currentGame.releaseDate || 'Unknown' }}
-      </p>
-
-      <p>
-        <strong>Description:</strong>
-        {{ currentGame.description || 'No description available.' }}
-      </p>
+      <section>
+        <h2>About</h2>
+        <p class="description">
+          {{ currentGame.description || 'No description available.' }}
+        </p>
+      </section>
 
       <section>
         <h2>Platforms</h2>
 
         @if (currentGame.platforms.length > 0) {
-        <ul>
+        <ul class="platform-list">
           @for (platform of currentGame.platforms; track platform.id) {
           <li>{{ platform.name }}</li>
           }
         </ul>
         } @else {
-        <p>No platforms listed.</p>
+        <p class="muted">No platforms listed.</p>
         }
       </section>
 
-      <section>
+      <section class="library-panel">
         <h2>My Library</h2>
 
         @if (!isLoggedIn()) {
-        <p>
+        <p class="muted">
           <a
             routerLink="/login"
             [queryParams]="{
@@ -86,81 +95,101 @@
           to add this game to your library.
         </p>
         } @else if (userGame()) {
-        <p>This game is already in your library.</p>
+        <div class="library-form">
+          <p class="muted">This game is already in your library.</p>
 
-        <label for="game-status">Status:</label>
-        <select
-          id="game-status"
-          [value]="selectedStatus()"
-          (change)="onStatusChange($event)"
-          [disabled]="isUpdating() || isDeleting()"
-        >
-          <option value="BACKLOG">Backlog</option>
-          <option value="PLAYING">Playing</option>
-          <option value="COMPLETED">Completed</option>
-          <option value="DROPPED">Dropped</option>
-        </select>
+          <div class="field-row">
+            <div class="form-field">
+              <label for="game-status">Status</label>
+              <select
+                id="game-status"
+                [value]="selectedStatus()"
+                (change)="onStatusChange($event)"
+                [disabled]="isUpdating() || isDeleting()"
+              >
+                <option value="BACKLOG">Backlog</option>
+                <option value="PLAYING">Playing</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="DROPPED">Dropped</option>
+              </select>
+            </div>
 
-        <label for="game-rating">My rating (1–10):</label>
-        <select
-          id="game-rating"
-          [ngModel]="selectedRating()"
-          (ngModelChange)="selectedRating.set($event)"
-          [disabled]="isUpdating() || isDeleting()"
-        >
-          <option [ngValue]="null">Not rated</option>
-          @for (rating of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track rating) {
-          <option [ngValue]="rating">{{ rating }}</option>
-          }
-        </select>
+            <div class="form-field">
+              <label for="game-rating">My rating (1–10)</label>
+              <select
+                id="game-rating"
+                [ngModel]="selectedRating()"
+                (ngModelChange)="selectedRating.set($event)"
+                [disabled]="isUpdating() || isDeleting()"
+              >
+                <option [ngValue]="null">Not rated</option>
+                @for (rating of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track rating) {
+                <option [ngValue]="rating">{{ rating }}</option>
+                }
+              </select>
+            </div>
+          </div>
 
-        <label for="game-notes">My notes:</label>
-        <textarea
-          id="game-notes"
-          rows="4"
-          [value]="selectedNotes()"
-          (input)="onNotesChange($event)"
-          [disabled]="isUpdating() || isDeleting()"
-          placeholder="What do you think of this game?"
-        ></textarea>
+          <div class="form-field">
+            <label for="game-notes">My notes</label>
+            <textarea
+              id="game-notes"
+              rows="4"
+              [value]="selectedNotes()"
+              (input)="onNotesChange($event)"
+              [disabled]="isUpdating() || isDeleting()"
+              placeholder="What do you think of this game?"
+            ></textarea>
+          </div>
 
-        <button
-          type="button"
-          (click)="updateGameStatus()"
-          [disabled]="isUpdating() || isDeleting()"
-        >
-          {{ isUpdating() ? 'Saving...' : 'Save changes' }}
-        </button>
+          <div class="actions">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="updateGameStatus()"
+              [disabled]="isUpdating() || isDeleting()"
+            >
+              {{ isUpdating() ? 'Saving...' : 'Save changes' }}
+            </button>
 
-        <button
-          type="button"
-          class="delete-button"
-          (click)="deleteFromLibrary()"
-          [disabled]="isUpdating() || isDeleting()"
-        >
-          {{ isDeleting() ? 'Removing...' : 'Remove from my library' }}
-        </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="deleteFromLibrary()"
+              [disabled]="isUpdating() || isDeleting()"
+            >
+              {{ isDeleting() ? 'Removing...' : 'Remove from my library' }}
+            </button>
+          </div>
+        </div>
         } @else {
-        <label for="new-game-status">Initial status:</label>
-        <select
-          id="new-game-status"
-          [value]="selectedStatus()"
-          (change)="onStatusChange($event)"
-          [disabled]="isAdding()"
-        >
-          <option value="BACKLOG">Backlog</option>
-          <option value="PLAYING">Playing</option>
-          <option value="COMPLETED">Completed</option>
-          <option value="DROPPED">Dropped</option>
-        </select>
+        <div class="library-form">
+          <div class="form-field">
+            <label for="new-game-status">Initial status</label>
+            <select
+              id="new-game-status"
+              [value]="selectedStatus()"
+              (change)="onStatusChange($event)"
+              [disabled]="isAdding()"
+            >
+              <option value="BACKLOG">Backlog</option>
+              <option value="PLAYING">Playing</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="DROPPED">Dropped</option>
+            </select>
+          </div>
 
-        <button
-          type="button"
-          (click)="addToLibrary()"
-          [disabled]="isAdding()"
-        >
-          {{ isAdding() ? 'Adding...' : 'Add to my library' }}
-        </button>
+          <div class="actions">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="addToLibrary()"
+              [disabled]="isAdding()"
+            >
+              {{ isAdding() ? 'Adding...' : 'Add to my library' }}
+            </button>
+          </div>
+        </div>
         }
 
         @if (libraryError()) {
@@ -171,7 +200,7 @@
   </article>
 </main>
 } @else {
-<main>
-  <p>Loading game...</p>
+<main class="page">
+  <p class="state-message">Loading game...</p>
 </main>
 }

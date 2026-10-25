@@ -229,14 +229,16 @@ textarea {
   background: var(--color-surface);
 }
 
-.filter-field {
+.filter-field,
+.form-field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   min-width: 0;
 }
 
-.filter-field label {
+.filter-field label,
+.form-field label {
   color: var(--color-text-muted);
   font-size: 0.78rem;
   font-weight: 600;
