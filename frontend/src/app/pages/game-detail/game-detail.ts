@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
@@ -35,6 +35,22 @@ export class GameDetail {
   isDeleting = signal(false);
 
   game = signal<Game | null>(null);
+
+  protected readonly placeholderUrl = 'images/cover-placeholder.svg';
+  private readonly failedCoverUrl = signal<string | null>(null);
+
+  coverSrc = computed(() => {
+    const cover = this.game()?.coverUrl;
+
+    return cover && cover !== this.failedCoverUrl()
+      ? cover
+      : this.placeholderUrl;
+  });
+
+  onCoverError(): void {
+    this.failedCoverUrl.set(this.game()?.coverUrl ?? null);
+  }
+
   userGame = signal<UserGame | null>(null);
   errorMessage = signal('');
   libraryError = signal('');

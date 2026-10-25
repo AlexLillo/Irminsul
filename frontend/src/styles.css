@@ -1,5 +1,20 @@
 /* ==========================================================================
-   Irminsul: global styles (design tokens and base rules)
+   Irminsul: global styles
+
+   1. Design tokens
+   2. Base
+   3. Form controls
+   4. Buttons
+   5. Messages and states
+   6. Utilities
+   7. Page layout
+   8. Collection pages (catalog and library)
+   9. Login and register card
+   10. Reduced motion
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Design tokens
    ========================================================================== */
 
 :root {
@@ -24,8 +39,8 @@
   --color-warning: #fbbf24;
 
   /* Typography */
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto,
-  'Helvetica Neue', Arial, sans-serif;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+  Arial, sans-serif;
 
   /* Shape, elevation and motion */
   --radius-sm: 6px;
@@ -39,7 +54,9 @@
   --content-width: 1200px;
 }
 
-/* Base */
+/* ==========================================================================
+   2. Base
+   ========================================================================== */
 
 *,
 *::before,
@@ -89,7 +106,9 @@ img {
   color: var(--color-on-accent);
 }
 
-/* Form controls */
+/* ==========================================================================
+   3. Form controls
+   ========================================================================== */
 
 input,
 select,
@@ -124,7 +143,33 @@ textarea {
   cursor: not-allowed;
 }
 
-/* Buttons (use as class="btn", class="btn btn-primary", etc.) */
+/* Label above a control (.filter-field is used by the catalog and library) */
+
+.filter-field,
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.filter-field label,
+.form-field label {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.field-error {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   4. Buttons (use as class="btn", class="btn btn-primary", etc.)
+   ========================================================================== */
 
 .btn {
   display: inline-flex;
@@ -170,7 +215,9 @@ textarea {
   color: var(--color-on-accent);
 }
 
-/* Feedback messages */
+/* ==========================================================================
+   5. Messages and states
+   ========================================================================== */
 
 .error {
   padding: 1rem;
@@ -180,20 +227,20 @@ textarea {
   color: var(--color-danger);
 }
 
-.field-error {
-  color: var(--color-danger);
-  font-size: 0.85rem;
+.state-message,
+.empty-results {
+  padding: 1.5rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-align: center;
 }
 
-/* Page container */
+/* ==========================================================================
+   6. Utilities
+   ========================================================================== */
 
-.page {
-  width: min(var(--content-width), 100% - 2rem);
-  margin-inline: auto;
-  padding-block: 2rem;
-}
-
-/* Eyebrow label (small text above a title) */
+/* Small text above a title */
 
 .eyebrow {
   margin: 0 0 0.5rem;
@@ -204,7 +251,81 @@ textarea {
   text-transform: uppercase;
 }
 
-/* Login and register card */
+/* Text for screen readers only */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   7. Page layout
+   ========================================================================== */
+
+.page {
+  width: min(var(--content-width), 100% - 2rem);
+  margin-inline: auto;
+  padding-block: 2rem;
+}
+
+.page-header {
+  margin-bottom: 1.75rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   8. Collection pages (catalog and library)
+   ========================================================================== */
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.results-count {
+  margin: 0 0 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .filters {
+    padding: 1rem;
+  }
+}
+
+/* ==========================================================================
+   9. Login and register card
+   ========================================================================== */
 
 .auth-card {
   width: min(440px, 100% - 2rem);
@@ -250,94 +371,12 @@ textarea {
   }
 }
 
+/* ==========================================================================
+   10. Reduced motion
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
-  }
-}
-
-/* Page header */
-
-.page-header {
-  margin-bottom: 1.75rem;
-}
-
-.page-header h1 {
-  margin: 0 0 0.25rem;
-  font-size: 1.75rem;
-}
-
-.page-header p {
-  margin: 0;
-  color: var(--color-text-muted);
-}
-
-/* Collection pages (catalog and library) */
-
-.filters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-  gap: 1rem;
-  align-items: end;
-  margin-bottom: 1.5rem;
-  padding: 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-}
-
-.filter-field,
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  min-width: 0;
-}
-
-.filter-field label,
-.form-field label {
-  color: var(--color-text-muted);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.results-count {
-  margin: 0 0 1rem;
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-}
-
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
-  gap: 1.25rem;
-}
-
-.state-message,
-.empty-results {
-  padding: 1.5rem;
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text-muted);
-  text-align: center;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  border: 0;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-@media (max-width: 600px) {
-  .filters {
-    padding: 1rem;
   }
 }

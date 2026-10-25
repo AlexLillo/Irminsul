@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Platform } from '../../models/game';
 import { GameStatus } from '../../services/user-game.service';
@@ -20,6 +20,20 @@ export class GameCard {
     COMPLETED: 'Completed',
     DROPPED: 'Dropped'
   };
+  private readonly placeholderUrl = 'images/cover-placeholder.svg';
+  private readonly failedCoverUrl = signal<string | null>(null);
+
+  protected readonly displayedCover = computed(() => {
+    const cover = this.coverUrl();
+
+    return cover && cover !== this.failedCoverUrl()
+      ? cover
+      : this.placeholderUrl;
+  });
+
+  protected onCoverError(): void {
+    this.failedCoverUrl.set(this.coverUrl());
+  }
 
   genre = input<string>();
   platforms = input<Platform[]>([]);

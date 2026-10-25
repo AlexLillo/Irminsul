@@ -23,6 +23,7 @@ public class Game {
 
     private LocalDate releaseDate;
 
+    @Column(length = 1000)
     private String coverUrl;
 
     @Enumerated(EnumType.STRING)

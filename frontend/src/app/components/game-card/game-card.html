@@ -1,10 +1,11 @@
 <article class="card">
   <div class="cover">
-    @if (coverUrl(); as cover) {
-    <img [src]="cover" alt="" loading="lazy">
-    } @else {
-    <div class="cover-placeholder" aria-hidden="true">No cover</div>
-    }
+    <img
+      [src]="displayedCover()"
+      alt=""
+      loading="lazy"
+      (error)="onCoverError()"
+    >
 
     @if (context() === 'catalog' && averageRating() !== null && ratingCount() > 0) {
     <span class="badge">

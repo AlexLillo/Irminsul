@@ -19,7 +19,7 @@ public class GameRequestDTO {
 
     private LocalDate releaseDate;
 
-    @Size(max = 255)
+    @Size(max = 1000)
     private String coverUrl;
 
     @NotNull

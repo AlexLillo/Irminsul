@@ -14,16 +14,13 @@
 
   <article class="game">
     <div class="cover">
-      @if (currentGame.coverUrl) {
       <img
-        [src]="currentGame.coverUrl"
-        [alt]="'Cover art for ' + currentGame.title"
+        [src]="coverSrc()"
+        [alt]="coverSrc() === placeholderUrl
+          ? 'No cover available'
+          : 'Cover art for ' + currentGame.title"
+        (error)="onCoverError()"
       >
-      } @else {
-      <div class="cover-placeholder" role="img" aria-label="No cover available">
-        No cover
-      </div>
-      }
     </div>
 
     <div class="details">
