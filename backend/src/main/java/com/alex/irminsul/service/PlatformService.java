@@ -8,15 +8,16 @@ import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class PlatformService {
 
     private final PlatformRepository platformRepository;
-
     private final GameRepository gameRepository;
 
     public PlatformService(PlatformRepository platformRepository,
@@ -45,6 +46,7 @@ public class PlatformService {
                 .map(this::toResponseDTO);
     }
 
+    @Transactional
     public PlatformResponseDTO save(PlatformRequestDTO platformRequestDTO) {
         if (platformRepository.existsByName(platformRequestDTO.getName())) {
             throw new DuplicateResourceException(
@@ -59,6 +61,7 @@ public class PlatformService {
         return toResponseDTO(savedPlatform);
     }
 
+    @Transactional
     public Optional<PlatformResponseDTO> update(
             Long id,
             PlatformRequestDTO platformRequestDTO) {
@@ -83,6 +86,7 @@ public class PlatformService {
                 });
     }
 
+    @Transactional
     public boolean deleteById(Long id) {
         if (!platformRepository.existsById(id)) {
             return false;

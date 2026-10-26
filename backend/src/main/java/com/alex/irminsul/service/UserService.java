@@ -8,11 +8,13 @@ import com.alex.irminsul.exception.DuplicateResourceException;
 import com.alex.irminsul.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -49,6 +51,7 @@ public class UserService {
                 .map(this::toResponseDTO);
     }
 
+    @Transactional
     public UserResponseDTO save(UserRequestDTO userRequestDTO) {
         if (userRepository.existsByUsername(userRequestDTO.getUsername())) {
             throw new DuplicateResourceException(

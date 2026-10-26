@@ -11,11 +11,13 @@ import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.UserGameRepository;
 import com.alex.irminsul.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserGameService {
 
     private final UserGameRepository userGameRepository;
@@ -50,6 +52,7 @@ public class UserGameService {
                 .toList();
     }
 
+    @Transactional
     public UserGameResponseDTO saveByUsername(
             String username,
             UserGameRequestDTO userGameRequestDTO) {
@@ -108,6 +111,7 @@ public class UserGameService {
                 .map(this::toResponseDTO);
     }
 
+    @Transactional
     public Optional<UserGameResponseDTO> updateByUsername(
             String username,
             Long gameId,
@@ -132,6 +136,7 @@ public class UserGameService {
                 });
     }
 
+    @Transactional
     public boolean deleteByUsernameAndGameId(
             String username,
             Long gameId) {

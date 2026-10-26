@@ -11,11 +11,13 @@ import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
 import com.alex.irminsul.repository.UserGameRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class GameService {
 
     private final GameRepository gameRepository;
@@ -125,6 +127,7 @@ public class GameService {
                 .collect(Collectors.toSet());
     }
 
+    @Transactional
     public GameResponseDTO save(GameRequestDTO gameRequestDTO) {
         if (gameRepository.existsByTitle(gameRequestDTO.getTitle())) {
             throw new DuplicateResourceException(
@@ -149,6 +152,7 @@ public class GameService {
         return toResponseDTO(savedGame);
     }
 
+    @Transactional
     public Optional<GameResponseDTO> update(
             Long id,
             GameRequestDTO gameRequestDTO) {
@@ -181,6 +185,7 @@ public class GameService {
                 });
     }
 
+    @Transactional
     public boolean deleteById(Long id) {
         if (!gameRepository.existsById(id)) {
             return false;
@@ -195,4 +200,3 @@ public class GameService {
         return true;
     }
 }
-
