@@ -4,6 +4,7 @@ import com.alex.irminsul.dto.PlatformRequestDTO;
 import com.alex.irminsul.dto.PlatformResponseDTO;
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.exception.DuplicateResourceException;
+import com.alex.irminsul.exception.ResourceInUseException;
 import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
 import org.springframework.data.domain.Sort;
@@ -93,7 +94,7 @@ public class PlatformService {
         }
 
         if (gameRepository.existsByPlatformsId(id)) {
-            throw new DuplicateResourceException(
+            throw new ResourceInUseException(
                     "Platform is used by one or more games");
         }
 

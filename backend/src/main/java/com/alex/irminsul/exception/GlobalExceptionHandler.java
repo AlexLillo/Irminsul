@@ -32,9 +32,9 @@ public class GlobalExceptionHandler {
         return Map.of("error", ex.getMessage());
     }
 
-    @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<Map<String, String>> handleDuplicateResource(
-            DuplicateResourceException ex) {
+    @ExceptionHandler({DuplicateResourceException.class, ResourceInUseException.class})
+    public ResponseEntity<Map<String, String>> handleConflictExceptions(
+            RuntimeException ex) {
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)

@@ -6,6 +6,7 @@ import com.alex.irminsul.dto.PlatformResponseDTO;
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.exception.DuplicateResourceException;
+import com.alex.irminsul.exception.ResourceInUseException;
 import com.alex.irminsul.exception.ResourceNotFoundException;
 import com.alex.irminsul.repository.GameRepository;
 import com.alex.irminsul.repository.PlatformRepository;
@@ -192,7 +193,7 @@ public class GameService {
         }
 
         if (userGameRepository.existsByGameId(id)) {
-            throw new DuplicateResourceException(
+            throw new ResourceInUseException(
                     "Game is in one or more users' libraries and cannot be deleted");
         }
 
