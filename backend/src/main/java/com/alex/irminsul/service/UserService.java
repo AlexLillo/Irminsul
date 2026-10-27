@@ -53,19 +53,22 @@ public class UserService {
 
     @Transactional
     public UserResponseDTO save(UserRequestDTO userRequestDTO) {
-        if (userRepository.existsByUsername(userRequestDTO.getUsername())) {
+        String username = userRequestDTO.getUsername().trim();
+        String normalizedEmail = userRequestDTO.getEmail().trim().toLowerCase();
+
+        if (userRepository.existsByUsername(username)) {
             throw new DuplicateResourceException(
-                    "Username already exists: " + userRequestDTO.getUsername());
+                    "Username already exists: " + username);
         }
 
-        if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
+        if (userRepository.existsByEmail(normalizedEmail)) {
             throw new DuplicateResourceException(
-                    "Email already exists: " + userRequestDTO.getEmail());
+                    "Email already exists: " + normalizedEmail);
         }
 
         User user = new User();
-        user.setUsername(userRequestDTO.getUsername());
-        user.setEmail(userRequestDTO.getEmail());
+        user.setUsername(username);
+        user.setEmail(normalizedEmail);
         user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         user.setRole(Role.USER);
 
