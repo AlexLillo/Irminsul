@@ -75,8 +75,8 @@ class SecurityRulesTest {
     }
 
     @Test
-    @DisplayName("POST /api/games - Should return 403 Forbidden for anonymous users")
-    void postGames_ShouldBeForbidden_ForAnonymousUser() throws Exception {
+    @DisplayName("POST /api/games - Should return 401 Unauthorized for anonymous users")
+    void postGames_ShouldBeUnauthorized_ForAnonymousUser() throws Exception {
         String payload = """
                 {"title": "Zelda", "genre": "ACTION"}
                 """;
@@ -85,11 +85,11 @@ class SecurityRulesTest {
                         .with(csrfToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @DisplayName("POST /api/games - Should return 403 Forbidden for users with role USER")
+    @DisplayName("POST /api/games - Should return 403 Forbidden for authenticated users with role USER")
     void postGames_ShouldBeForbidden_ForRoleUser() throws Exception {
         String payload = """
                 {"title": "Zelda", "genre": "ACTION"}
@@ -138,14 +138,14 @@ class SecurityRulesTest {
     }
 
     @Test
-    @DisplayName("GET /api/users - Should return 403 Forbidden for anonymous users")
-    void getUsers_ShouldBeForbidden_ForAnonymousUser() throws Exception {
+    @DisplayName("GET /api/users - Should return 401 Unauthorized for anonymous users")
+    void getUsers_ShouldBeUnauthorized_ForAnonymousUser() throws Exception {
         mockMvc.perform(get("/api/users"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @DisplayName("GET /api/users - Should return 403 Forbidden for users with role USER")
+    @DisplayName("GET /api/users - Should return 403 Forbidden for authenticated users with role USER")
     void getUsers_ShouldBeForbidden_ForRoleUser() throws Exception {
         mockMvc.perform(get("/api/users")
                         .with(user("user").roles("USER")))
@@ -201,10 +201,10 @@ class SecurityRulesTest {
     }
 
     @Test
-    @DisplayName("GET /api/user-games/me - Should return 403 Forbidden for anonymous users")
-    void getUserGamesMe_ShouldBeForbidden_ForAnonymousUser() throws Exception {
+    @DisplayName("GET /api/user-games/me - Should return 401 Unauthorized for anonymous users")
+    void getUserGamesMe_ShouldBeUnauthorized_ForAnonymousUser() throws Exception {
         mockMvc.perform(get("/api/user-games/me"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
