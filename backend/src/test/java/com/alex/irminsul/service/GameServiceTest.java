@@ -2,6 +2,7 @@ package com.alex.irminsul.service;
 
 import com.alex.irminsul.dto.GameRequestDTO;
 import com.alex.irminsul.dto.GameResponseDTO;
+import com.alex.irminsul.dto.PlatformResponseDTO;
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.entity.Genre;
 import com.alex.irminsul.entity.Platform;
@@ -236,5 +237,40 @@ class GameServiceTest {
 
         assertThat(deleted).isTrue();
         verify(gameRepository).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("Should sort game platforms alphabetically case-insensitive in response DTO")
+    void findById_ShouldReturnPlatformsSortedCaseInsensitively() {
+        Platform p1 = new Platform();
+        p1.setId(1L);
+        p1.setName("Switch");
+
+        Platform p2 = new Platform();
+        p2.setId(2L);
+        p2.setName("android");
+
+        Platform p3 = new Platform();
+        p3.setId(3L);
+        p3.setName("PC");
+
+        Game game = new Game();
+        game.setId(1L);
+        game.setTitle("Dead Cells");
+        game.setGenre(Genre.ACTION);
+        game.setPlatforms(Set.of(p1, p2, p3));
+
+        when(gameRepository.findById(1L)).thenReturn(Optional.of(game));
+        when(userGameRepository.findRatingStatisticsByGameId(1L)).thenReturn(Collections.emptyList());
+
+        Optional<GameResponseDTO> result = gameService.findById(1L);
+
+        assertThat(result).isPresent();
+
+        List<String> platformNames = result.get().getPlatforms().stream()
+                .map(PlatformResponseDTO::getName)
+                .toList();
+
+        assertThat(platformNames).containsExactly("android", "PC", "Switch");
     }
 }

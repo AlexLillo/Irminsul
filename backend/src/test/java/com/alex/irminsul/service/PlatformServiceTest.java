@@ -10,6 +10,7 @@ import com.alex.irminsul.repository.PlatformRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -36,7 +37,7 @@ class PlatformServiceTest {
     private PlatformService platformService;
 
     @Test
-    @DisplayName("Should return all platforms ordered by name")
+    @DisplayName("Should request platforms sorted by name ascending and case-insensitive")
     void findAll_ShouldReturnAllPlatformsSorted() {
         Platform platform1 = new Platform();
         platform1.setId(1L);
@@ -53,6 +54,16 @@ class PlatformServiceTest {
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getName()).isEqualTo("Nintendo Switch");
         assertThat(result.get(1).getName()).isEqualTo("PlayStation 5");
+
+        ArgumentCaptor<Sort> sortCaptor = ArgumentCaptor.forClass(Sort.class);
+        verify(platformRepository).findAll(sortCaptor.capture());
+
+        Sort capturedSort = sortCaptor.getValue();
+        Sort.Order order = capturedSort.getOrderFor("name");
+
+        assertThat(order).isNotNull();
+        assertThat(order.isAscending()).isTrue();
+        assertThat(order.isIgnoreCase()).isTrue();
     }
 
     @Test
