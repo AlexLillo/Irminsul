@@ -1,9 +1,16 @@
 package com.alex.irminsul.repository;
 
 import com.alex.irminsul.entity.Game;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface GameRepository extends JpaRepository<Game, Long>{
+import java.util.List;
+
+public interface GameRepository extends JpaRepository<Game, Long> {
+
+    @Override
+    @EntityGraph(attributePaths = {"platforms"})
+    List<Game> findAll();
 
     boolean existsByTitle(String title);
 
