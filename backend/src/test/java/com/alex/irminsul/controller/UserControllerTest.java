@@ -87,7 +87,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/users - Should return 200 OK and created user when request is valid")
+    @DisplayName("POST /api/users - Should return 201 Created and created user when request is valid")
     void save_ShouldReturnSavedUser_WhenDataIsValid() throws Exception {
         String validPayload = """
                 {
@@ -103,7 +103,7 @@ class UserControllerTest {
         mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validPayload))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(10L))
                 .andExpect(jsonPath("$.username").value("newuser"))
                 .andExpect(jsonPath("$.role").value("USER"));

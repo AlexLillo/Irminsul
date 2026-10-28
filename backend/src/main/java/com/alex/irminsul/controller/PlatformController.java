@@ -5,6 +5,7 @@ import com.alex.irminsul.dto.PlatformResponseDTO;
 import com.alex.irminsul.entity.Platform;
 import com.alex.irminsul.service.PlatformService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +34,9 @@ public class PlatformController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public PlatformResponseDTO save(
             @RequestBody @Valid PlatformRequestDTO platformRequestDTO) {
-
         return platformService.save(platformRequestDTO);
     }
 

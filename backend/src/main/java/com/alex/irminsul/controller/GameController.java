@@ -5,6 +5,7 @@ import com.alex.irminsul.dto.GameResponseDTO;
 import com.alex.irminsul.entity.Game;
 import com.alex.irminsul.service.GameService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +34,9 @@ public class GameController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDTO save(
             @RequestBody @Valid GameRequestDTO gameRequestDTO) {
-
         return gameService.save(gameRequestDTO);
     }
 

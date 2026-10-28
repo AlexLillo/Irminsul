@@ -4,6 +4,7 @@ import com.alex.irminsul.dto.UserGameRequestDTO;
 import com.alex.irminsul.dto.UserGameResponseDTO;
 import com.alex.irminsul.service.UserGameService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -51,16 +52,12 @@ public class UserGameController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserGameResponseDTO save(
             @RequestBody @Valid UserGameRequestDTO userGameRequestDTO,
             Authentication authentication) {
-
         String username = authentication.getName();
-
-        return userGameService.saveByUsername(
-                username,
-                userGameRequestDTO
-        );
+        return userGameService.saveByUsername(username, userGameRequestDTO);
     }
 
     @PutMapping("/{gameId}")

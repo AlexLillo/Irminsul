@@ -4,6 +4,7 @@ import com.alex.irminsul.dto.UserRequestDTO;
 import com.alex.irminsul.dto.UserResponseDTO;
 import com.alex.irminsul.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +45,9 @@ public class UserController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDTO save(
             @RequestBody @Valid UserRequestDTO userRequestDTO) {
-
         return userService.save(userRequestDTO);
     }
 }

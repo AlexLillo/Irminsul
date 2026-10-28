@@ -104,7 +104,7 @@ class SecurityRulesTest {
     }
 
     @Test
-    @DisplayName("POST /api/games - Should return 200 OK for users with role ADMIN and valid CSRF")
+    @DisplayName("POST /api/games - Should return 201 Created for users with role ADMIN and valid CSRF")
     void postGames_ShouldSucceed_ForRoleAdmin_WithCsrf() throws Exception {
         String payload = """
                 {"title": "Zelda", "genre": "ACTION"}
@@ -120,7 +120,7 @@ class SecurityRulesTest {
                         .with(user("admin").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -163,7 +163,7 @@ class SecurityRulesTest {
     }
 
     @Test
-    @DisplayName("POST /api/users (Register) - Should be public when CSRF token is present")
+    @DisplayName("POST /api/users (Register) - Should return 201 Created when CSRF token is present")
     void postUsers_ShouldBePublic_WithCsrf() throws Exception {
         String payload = """
                 {
@@ -180,7 +180,7 @@ class SecurityRulesTest {
                         .with(csrfToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

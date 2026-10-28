@@ -85,7 +85,7 @@ class PlatformControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/platforms - Should return 200 OK and created platform when valid")
+    @DisplayName("POST /api/platforms - Should return 201 Created and created platform when valid")
     void save_ShouldReturnSavedPlatform_WhenValid() throws Exception {
         String validPayload = """
                 {
@@ -99,7 +99,7 @@ class PlatformControllerTest {
         mockMvc.perform(post("/api/platforms")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validPayload))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(3L))
                 .andExpect(jsonPath("$.name").value("PC"));
     }

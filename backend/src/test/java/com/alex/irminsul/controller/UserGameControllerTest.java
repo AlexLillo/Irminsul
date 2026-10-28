@@ -110,7 +110,7 @@ class UserGameControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/user-games - Should return 200 OK and saved entry when payload is valid")
+    @DisplayName("POST /api/user-games - Should return 201 Created and saved entry when payload is valid")
     void save_ShouldReturnSavedEntry_WhenValid() throws Exception {
         String validPayload = """
                 {
@@ -136,7 +136,7 @@ class UserGameControllerTest {
                         .principal(AUTH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validPayload))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.gameId").value(1L))
                 .andExpect(jsonPath("$.status").value("BACKLOG"));
     }

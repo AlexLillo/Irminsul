@@ -110,7 +110,7 @@ class GameControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/games - Should return 200 OK and saved game when request is valid")
+    @DisplayName("POST /api/games - Should return 201 Created and saved game when request is valid")
     void save_ShouldReturnSavedGame_WhenValid() throws Exception {
         String validPayload = """
                 {
@@ -138,7 +138,7 @@ class GameControllerTest {
         mockMvc.perform(post("/api/games")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validPayload))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(5L))
                 .andExpect(jsonPath("$.title").value("Bloodborne"));
     }
