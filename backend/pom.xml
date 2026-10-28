@@ -11,8 +11,8 @@
 	<groupId>com.alex</groupId>
 	<artifactId>irminsul</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>Irminsul</name>
+	<description>A full-stack application for managing and rating a personal video game collection.</description>
 	<url/>
 	<licenses>
 		<license/>
