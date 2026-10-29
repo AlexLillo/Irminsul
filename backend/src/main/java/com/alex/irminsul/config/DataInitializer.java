@@ -45,6 +45,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void seedDatabase() {
+
         // ==========================================
         // 1. PLATFORMS
         // ==========================================
@@ -99,7 +100,7 @@ public class DataInitializer implements CommandLineRunner {
         Game hades = createGame("Hades", "Defy the god of the dead as you hack and slash out of the Underworld.", LocalDate.of(2020, 9, 17), "https://images.igdb.com/igdb/image/upload/t_cover_big/cob9kr.webp", Genre.ACTION, Set.of(pc, ps4, ps5, nswitch));
         Game slayTheSpire = createGame("Slay the Spire", "The benchmark deck-building roguelike combining card games and tactical RPG combat.", LocalDate.of(2019, 1, 23), "https://images.igdb.com/igdb/image/upload/t_cover_big/co1iyf.webp", Genre.STRATEGY, Set.of(pc, ps4, nswitch));
         Game cuphead = createGame("Cuphead", "A classic run and gun action game heavily focused on boss battles inspired by 1930s cartoons.", LocalDate.of(2017, 9, 29), "https://images.igdb.com/igdb/image/upload/t_cover_big/co62ao.webp", Genre.PLATFORMER, Set.of(pc, ps4, nswitch));
-        Game deadCells = createGame("Dead Cells", "A rogue-lite, metroidvania inspired action-platformer.", LocalDate.of(2018, 8, 7), "https://images.igdb.com/igdb/image/upload/t_cover_big/co1m7b.webp", Genre.ACTION, Set.of(pc, ps4, nswitch));
+        Game deadCells = createGame("Dead Cells", "A rogue-lite, metroidvania inspired action-platformer.", LocalDate.of(2018, 8, 7), "https://images.igdb.com/igdb/image/upload/t_cover_big/co7jfv.webp", Genre.ACTION, Set.of(pc, ps4, nswitch));
         Game skyrim = createGame("Skyrim", "The open-world masterpiece by Bethesda set in the cold mountains of Tamriel.", LocalDate.of(2011, 11, 11), "https://images.igdb.com/igdb/image/upload/t_cover_big/cocs1l.webp", Genre.RPG, Set.of(pc, ps3, ps4, ps5, nswitch));
         Game genshin = createGame("Genshin Impact", "Embark on a journey across Teyvat to seek answers from The Seven.", LocalDate.of(2020, 9, 28), "https://images.igdb.com/igdb/image/upload/t_cover_big/coa9dy.webp", Genre.ADVENTURE, Set.of(pc, ps4, ps5));
         Game smash = createGame("Super Smash Bros Ultimate", "Legendary game worlds and fighters collide in the ultimate showdown.", LocalDate.of(2018, 12, 7), "https://images.igdb.com/igdb/image/upload/t_cover_big/co2255.webp", Genre.FIGHTING, Set.of(nswitch));
