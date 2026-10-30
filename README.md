@@ -71,27 +71,42 @@ manage the catalog and the platforms.
 
 ### Prerequisites
 
-- Java 21
-- Node.js and npm (use the same Node version as in `.github/workflows/ci.yml`)
-- Docker (for PostgreSQL)
+- Git
+- Java 21 (`java -version`)
+- Node.js 24 and npm
+- Docker, running (`docker --version`)
 
-### 1. Start the database
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/AlexLillo/Irminsul.git
+cd Irminsul
+```
+
+### 2. Start the database
 
 ```bash
 docker compose up -d
 ```
 
-### 2. Start the backend
+The `-d` flag runs PostgreSQL in the background, so you can keep using the
+same terminal.
+
+### 3. Start the backend
 
 ```bash
 cd backend
 ./mvnw spring-boot:run        # Windows: mvnw.cmd spring-boot:run
 ```
 
-The API is available at `http://localhost:8080`. On the first run, with an empty
-database, demo data is created automatically (see below).
+Wait until the log shows that the application has started on port 8080. The API
+is then available at `http://localhost:8080`. On the first run, with an empty
+database, demo data is created automatically (see below). Leave this terminal
+open.
 
-### 3. Start the frontend
+### 4. Start the frontend
+
+In a second terminal, from the repository root:
 
 ```bash
 cd frontend
@@ -99,7 +114,22 @@ npm install
 npm start
 ```
 
-Open `http://localhost:4200`.
+Open `http://localhost:4200`. Leave this terminal open too.
+
+### Stopping
+
+Press `Ctrl+C` in the backend and frontend terminals. To stop the database, run
+`docker compose down`. Add `-v` to also delete its data; the demo data is
+created again the next time the backend starts.
+
+### Troubleshooting
+
+- **Port 5432 is already in use** (another PostgreSQL is running): set
+  `DB_PORT` to a free port in a `.env` file next to `docker-compose.yml`, and
+  export the same `DB_PORT` before starting the backend.
+- **The backend cannot connect to the database**: check that the container is
+  running with `docker compose ps`.
+- **`./mvnw: Permission denied`** (Linux/macOS): run `chmod +x backend/mvnw`.
 
 ### Demo accounts
 
@@ -158,7 +188,8 @@ What is covered:
 - **Frontend**: route guards, the authentication service and the catalog
   filtering and sorting logic.
 
-The tests run automatically on every push through GitHub Actions.
+The tests run automatically on every push to `main` and on every pull request
+through GitHub Actions.
 
 ## API overview
 
